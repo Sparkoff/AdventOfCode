@@ -1,0 +1,15 @@
+{
+  "name": "aoc2017",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aoc2017.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node aoc2017.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}

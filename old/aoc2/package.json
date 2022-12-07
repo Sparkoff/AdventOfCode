@@ -1,0 +1,16 @@
+{
+  "name": "aoc2017",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aoc2017.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node aoc2017.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2"
+  }
+}
