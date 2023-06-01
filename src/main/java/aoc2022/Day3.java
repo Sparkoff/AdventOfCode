@@ -4,10 +4,7 @@ import common.DayBase;
 import common.PuzzleInput;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class Day3 extends DayBase<List<String>, Integer> {
@@ -51,7 +48,7 @@ public class Day3 extends DayBase<List<String>, Integer> {
                 .orElseThrow();
     }
 
-    private List<List<String>>
+    //private List<List<String>>
 
     protected static int getItemValue(String item) {
         return ALPHABET.indexOf(item) + 1;

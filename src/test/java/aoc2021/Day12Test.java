@@ -1,6 +1,5 @@
 package aoc2021;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -123,7 +122,6 @@ class Day12Test {
     }
 
     @Test
-    @Disabled
     void test_real_inputs() {
         Day12 day = new Day12();
 
