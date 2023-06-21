@@ -5,6 +5,10 @@ import common.PuzzleInput;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 public class Day3 extends DayBase<List<String>, Integer> {
@@ -34,7 +38,22 @@ public class Day3 extends DayBase<List<String>, Integer> {
 
     @Override
     public Integer secondStar() {
-        return null;
+        List<String> bags = this.getInput(PuzzleInput::asStringList);
+
+        return IntStream.range(0, bags.size())
+                .boxed()
+                .collect(Collectors.groupingBy(idx -> idx / 3))
+                .values().stream()
+                .map(idx -> idx.stream().map(bags::get))
+                .flatMap(group -> group
+                        .flatMap(b -> Arrays.stream(b.split("")).distinct())
+                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                        .entrySet().stream()
+                        .filter(e -> e.getValue() == 3)
+                        .map(Map.Entry::getKey))
+                .map(Day3::getItemValue)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
 

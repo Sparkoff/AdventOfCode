@@ -62,7 +62,7 @@ class Day3Test {
         Day3 day = new Day3();
 
         assertEquals(8105, day.firstStar());
-        assertEquals(0, day.secondStar());
+        assertEquals(2363, day.secondStar());
     }
 
 }
