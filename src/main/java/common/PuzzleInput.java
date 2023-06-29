@@ -59,4 +59,8 @@ public class PuzzleInput<T> {
         return input.get(0);
     }
 
+    public static Integer asInt(List<String> input) {
+        return Integer.parseInt(input.get(0));
+    }
+
 }
