@@ -4,9 +4,7 @@ import common.DayBase;
 import common.PuzzleInput;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class Day5 extends DayBase<List<Integer>, Integer> {

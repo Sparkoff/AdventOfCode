@@ -189,7 +189,7 @@ public class Day23 extends DayBase<Day23.State, Integer> {
             moves.addAll(hallwayToRoom(amphipod,  state, energy));
             return moves;
         }
-        static List<Move> roomToHallway(String amphipod, State state, int energy) {;
+        static List<Move> roomToHallway(String amphipod, State state, int energy) {
             if (Amphipod.hasFinished(amphipod, state) || !Amphipod.isInRoom(amphipod, state)) return List.of();
 
             int currentRoom = IntStream.range(0, 4)
