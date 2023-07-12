@@ -3,11 +3,9 @@ package aoc2017;
 import common.DayBase;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
-public class Day13 extends DayBase<Map<Integer, Integer>, Integer> {
+public class Day13 extends DayBase<List<Day13.Scanner>, Integer> {
 
     public Day13() {
         super();
@@ -17,24 +15,48 @@ public class Day13 extends DayBase<Map<Integer, Integer>, Integer> {
         super(input);
     }
 
+    record Scanner(int range, int depth) {
+        public boolean getCaught(int delay) {
+            return (delay + range) % (2 * (depth - 1)) == 0;
+        }
+        public int severity() {
+            return range * depth;
+        }
+    }
+
     @Override
     public Integer firstStar() {
-        Map<Integer, Integer> firewall = this.getInput(Day13::parseFirewall);
+        List<Day13.Scanner> firewall = this.getInput(Day13::parseFirewall);
 
-        return 0;
+        return firewall.stream()
+                .mapToInt(s -> s.getCaught(0) ? s.severity() : 0)
+                .sum();
     }
 
     @Override
     public Integer secondStar() {
-        Map<Integer, Integer> firewall = this.getInput(Day13::parseFirewall);
+        List<Day13.Scanner> firewall = this.getInput(Day13::parseFirewall);
 
-        return 0;
-
+        int delay = 1;
+        while (true) {
+            boolean caught = false;
+            for (Scanner s : firewall) {
+                caught = s.getCaught(delay);
+                if (caught) {
+                    delay++;
+                    break;
+                }
+            }
+            if (!caught) {
+                return delay;
+            }
+        }
     }
 
-    private static Map<Integer, Integer> parseFirewall(List<String> input) {
+    private static List<Day13.Scanner> parseFirewall(List<String> input) {
         return input.stream()
                 .map(l -> l.split(": "))
-                .collect(Collectors.toMap(l -> Integer.parseInt(l[0]), l -> Integer.parseInt(l[1])));
+                .map(l -> new Scanner(Integer.parseInt(l[0]), Integer.parseInt(l[1])))
+                .toList();
     }
 }
