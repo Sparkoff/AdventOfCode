@@ -87,7 +87,7 @@ public class Day14 extends DayBase<String, Integer> {
         for (int j = 0; j < diskState.size(); j++) {
             List<String> squares = List.of(diskState.get(j).split(""));
             for (int i = 0; i < squares.size(); i++) {
-                if (Objects.equals(squares.get(i), "1")) {
+                if (squares.get(i).equals("1")) {
                     used.add(new Square(i, j));
                 }
             }
