@@ -4,7 +4,6 @@ import common.DayBase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,7 +97,7 @@ public class Day22 extends DayBase<List<Day22.Instruction>, Long> {
                     return m;
                 })
                 .map(m -> new Instruction(
-                        Objects.equals(m.group(1), "on"),
+                        m.group(1).equals("on"),
                         new Cuboid(
                                 Integer.parseInt(m.group(2)),
                                 Integer.parseInt(m.group(3)),

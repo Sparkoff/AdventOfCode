@@ -4,7 +4,6 @@ import common.DayBase;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,7 +25,7 @@ public class Day1 extends DayBase<List<Integer>, Integer> {
         captcha.add(captcha.get(0));
 
         return IntStream.range(0, captcha.size() - 1)
-                .map(i -> (Objects.equals(captcha.get(i), captcha.get(i + 1))) ? captcha.get(i) : 0)
+                .map(i -> (captcha.get(i).equals(captcha.get(i + 1))) ? captcha.get(i) : 0)
                 .sum();
     }
 
@@ -36,7 +35,7 @@ public class Day1 extends DayBase<List<Integer>, Integer> {
 
         int halfway = captcha.size() / 2;
         return IntStream.range(0, halfway)
-                .map(i -> (Objects.equals(captcha.get(i), captcha.get(i + halfway))) ? captcha.get(i) : 0)
+                .map(i -> (captcha.get(i).equals(captcha.get(i + halfway))) ? captcha.get(i) : 0)
                 .sum() * 2;
     }
 

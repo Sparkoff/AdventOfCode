@@ -5,7 +5,6 @@ import common.DayBase;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -134,7 +133,7 @@ public class Day21 extends DayBase<Day21.InitPawn, Long> {
     private static long getMaxVictories(VictorySteps ply1, VictorySteps ply2) {
         long ply1VictoryCount = ply1.victories.entrySet().stream()
                 .map(e1 -> e1.getValue() * (Long) ply2.fails.entrySet().stream()
-                        .filter(e2 -> Objects.equals(e2.getKey(), e1.getKey() - 1))  // if both player have victories on same round, ply1 win as he plays first
+                        .filter(e2 -> e2.getKey().equals(e1.getKey() - 1))  // if both player have victories on same round, ply1 win as he plays first
                         .map(Map.Entry::getValue)
                         .mapToLong(Long::longValue)
                         .sum())
@@ -142,7 +141,7 @@ public class Day21 extends DayBase<Day21.InitPawn, Long> {
                 .sum();
         long ply2VictoryCount = ply2.victories.entrySet().stream()
                 .map(e2 -> e2.getValue() * (Long) ply1.fails.entrySet().stream()
-                        .filter(e1 -> Objects.equals(e1.getKey(), e2.getKey()))  // if both player have victories on same round, ply2 fails as he plays second
+                        .filter(e1 -> e1.getKey().equals(e2.getKey()))  // if both player have victories on same round, ply2 fails as he plays second
                         .map(Map.Entry::getValue)
                         .mapToLong(Long::longValue)
                         .sum())

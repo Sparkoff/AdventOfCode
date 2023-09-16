@@ -5,7 +5,6 @@ import common.DayBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 
 public class Day16 extends DayBase<List<Day16.DanceMove>, String> {
