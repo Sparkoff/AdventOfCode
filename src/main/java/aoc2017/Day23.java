@@ -13,10 +13,6 @@ public class Day23 extends DayBase<List<Day23.Instruction>, Integer> {
         super();
     }
 
-    public Day23(List<String> input) {
-        super(input);
-    }
-
     record Instruction(String type, String x, String y) {
         public void execute(Map<String, Integer> register) {
             int idxInc = 1;

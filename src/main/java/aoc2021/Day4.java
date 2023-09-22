@@ -118,8 +118,8 @@ public class Day4 extends DayBase<Day4.Bingo, Integer> {
                 continue;
             }
 
-            if (line.equals("")) {
-                if (rows.size() > 0) {
+            if (line.isEmpty()) {
+                if (!rows.isEmpty()) {
                     List<Integer> fieldValues = rows.stream()
                             .map(l -> l.split(" "))
                             .flatMap(Arrays::stream)

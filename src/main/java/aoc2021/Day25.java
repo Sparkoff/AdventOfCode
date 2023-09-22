@@ -16,8 +16,8 @@ public class Day25 extends DayBase<Day25.SeaFloor, Integer> {
         super(input);
     }
 
-    record Coord(int x, int y) {}
-    record SeaFloor(int height, int width, List<Coord> east, List<Coord> south, boolean hasMoved) {
+    public record Coord(int x, int y) {}
+    public record SeaFloor(int height, int width, List<Coord> east, List<Coord> south, boolean hasMoved) {
         public SeaFloor(int height, int width, List<Coord> east, List<Coord> south) {
             this(height, width, east, south, true);
         }

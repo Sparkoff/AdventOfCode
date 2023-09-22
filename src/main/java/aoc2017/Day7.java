@@ -121,7 +121,7 @@ public class Day7 extends DayBase<Day7.Program, String> {
 
         // list of parent program names
         List<String> parents = programs.entrySet().stream()
-                .filter(p -> p.getValue().getChildren().size() > 0)
+                .filter(p -> !p.getValue().getChildren().isEmpty())
                 .map(Map.Entry::getKey)
                 .toList();
         // list of child program names
@@ -159,7 +159,7 @@ public class Day7 extends DayBase<Day7.Program, String> {
     }
     private static Program getProgramTree(String name, Map<String,Program> programList) {
         Program program = programList.get(name);
-        if (programList.get(name).getChildren().size() > 0) {
+        if (!programList.get(name).getChildren().isEmpty()) {
             return new Program(
                     program.getName(),
                     program.getSize(),

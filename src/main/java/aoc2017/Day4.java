@@ -43,7 +43,7 @@ public class Day4 extends DayBase<List<List<String>>, Integer> {
                 .map(pass -> pass.stream()
                         .filter(s -> Collections.frequency(pass, s) > 1)
                         .toList())
-                .filter(pass -> pass.size() == 0)
+                .filter(List::isEmpty)
                 .count());
     }
 

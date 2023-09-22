@@ -65,11 +65,11 @@ public class Day20 extends DayBase<Day20.Image, Integer> {
         return image.countLitPixels();
     }
 
-    public Image applyAlgorithm(Image image, boolean isEven) {
-        // add 2 layers of default bits around image to process 3x3 tiles including original borders)
+    private Image applyAlgorithm(Image image, boolean isEven) {
+        // add 2 layers of default bits around image to process 3x3 tiles including original borders
         List<String> enlargedImage = image.enlargeImage(isEven);
 
-        // final image dimension (working image have extra frame of 1 bit compared to final, which remain untouched by process)
+        // final image dimension (working image have extra frames of 1 bit compared to final, which remain untouched by process)
         int xmax = enlargedImage.get(0).length() - 2;
         int ymax = enlargedImage.size() - 2;
 

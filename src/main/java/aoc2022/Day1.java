@@ -55,7 +55,7 @@ public class Day1 extends DayBase<List<Day1.Elf>, Integer> {
 
         List<Integer> calories = new ArrayList<>();
         for (String cal : extendedInput) {
-            if (cal.equals("")) {
+            if (cal.isEmpty()) {
                 elves.add(new Elf(calories));
                 calories = new ArrayList<>();
             } else {

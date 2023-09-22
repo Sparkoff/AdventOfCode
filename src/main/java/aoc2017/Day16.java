@@ -91,7 +91,7 @@ public class Day16 extends DayBase<List<Day16.DanceMove>, String> {
             if (dancers.equals(steps.get(0))) {
                 // a routine is discovered, no need to dance further
                 // final standing can be guessed
-                return steps.get((int) (danceLenth % steps.size()));
+                return steps.get(danceLenth % steps.size());
             } else {
                 steps.add(dancers);
             }

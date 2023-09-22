@@ -84,7 +84,7 @@ public class Day15 extends DayBase<Day15.RiskMap, Integer> {
         List<RiskStep> remains = new ArrayList<>();
         remains.add(new RiskStep(0, (short) 0));
 
-        while (remains.size() > 0) {
+        while (!remains.isEmpty()) {
             RiskStep next = remains.remove(0);
             if (pathMap.get(next.idx) < next.riskLevel) continue;
 
