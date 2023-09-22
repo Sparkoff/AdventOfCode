@@ -84,7 +84,7 @@ public class Day18 extends DayBase<List<Day18.Instruction>, Integer> {
             long yValue = 0;
             if (reg != null) {
                 try{
-                    yValue = Integer.parseInt(reg);
+                    yValue = Long.parseLong(reg);
                 } catch (NumberFormatException e) {
                     yValue = registers.get(reg);
                 }
