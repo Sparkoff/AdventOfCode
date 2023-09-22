@@ -11,10 +11,10 @@ class Day24Test {
     void test_execution_model() {
         Day24 day = new Day24();
 
-        assertEquals(day.executeRawInput(15236985741256L), day.executeInterpretedInput(15236985741256L));
-        assertEquals(day.executeRawInput(25486587413629L), day.executeInterpretedInput(25486587413629L));
-        assertEquals(day.executeRawInput(96855236587412L), day.executeInterpretedInput(96855236587412L));
-        assertEquals(day.executeRawInput(65874236524198L), day.executeInterpretedInput(65874236524198L));
+        assertEquals(day.executeRawInput(day.getInput(Day24::parseMONAD), 15236985741256L), day.executeInterpretedInput(15236985741256L));
+        assertEquals(day.executeRawInput(day.getInput(Day24::parseMONAD), 25486587413629L), day.executeInterpretedInput(25486587413629L));
+        assertEquals(day.executeRawInput(day.getInput(Day24::parseMONAD), 96855236587412L), day.executeInterpretedInput(96855236587412L));
+        assertEquals(day.executeRawInput(day.getInput(Day24::parseMONAD), 65874236524198L), day.executeInterpretedInput(65874236524198L));
     }
 
     @Test

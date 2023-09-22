@@ -64,7 +64,7 @@ public class Day11 extends DayBase<List<Integer>, Integer> {
                 .filter(idx -> finalCluster.get(idx) > 9)
                 .boxed()
                 .collect(Collectors.toList());
-        while (remains.size() > 0) {
+        while (!remains.isEmpty()) {
             int next = remains.remove(0);
             if (visited.contains(next)) continue;
 

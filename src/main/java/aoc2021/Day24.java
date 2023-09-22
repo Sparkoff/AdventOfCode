@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
@@ -15,10 +14,7 @@ public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
         super();
     }
 
-    public Day24(List<String> input) {
-        super(input);
-    }
-    record Instruction(String operator, String a, String b) {}
+    public record Instruction(String operator, String a, String b) {}
 
     @Override
     public Long firstStar() {
@@ -117,7 +113,7 @@ public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
 
         long modelNumber = 65984919997939L;
 
-        int check = executeRawInput(modelNumber);
+        int check = executeRawInput(procedure, modelNumber);
         if (check != 0) return -1L;
 
         check = executeInterpretedInput(modelNumber);
@@ -157,7 +153,7 @@ public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
 
         long modelNumber = 11211619541713L;
 
-        int check = executeRawInput(modelNumber);
+        int check = executeRawInput(procedure, modelNumber);
         if (check != 0) return -1L;
 
         check = executeInterpretedInput(modelNumber);
@@ -166,11 +162,10 @@ public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
         return modelNumber;
     }
 
-    public int executeRawInput(long modelNumber) {
+    public int executeRawInput(List<Instruction> procedure, long modelNumber) {
         List<Integer> input = Arrays.stream(String.valueOf(modelNumber).split(""))
                 .map(Integer::parseInt)
                 .toList();
-        List<Instruction> procedure = this.getInput(Day24::parseMONAD);
 
         Map<String, Integer> vars = new HashMap<>();
         vars.put("w", 0);
@@ -201,7 +196,7 @@ public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
                 case "mul" -> vars.put(a, vars.get(a) * bValue);
                 case "div" -> vars.put(a, vars.get(a) / bValue);
                 case "mod" -> vars.put(a, vars.get(a) % bValue);
-                case "eql" -> vars.put(a, (Objects.equals(vars.get(a), bValue)) ? 1 : 0);
+                case "eql" -> vars.put(a, (vars.get(a).equals(bValue)) ? 1 : 0);
                 default -> {
                 }
             }
@@ -249,7 +244,7 @@ public class Day24 extends DayBase<List<Day24.Instruction>, Long> {
         return z;
     }
 
-    private static List<Instruction> parseMONAD(List<String> input) {
+    public static List<Instruction> parseMONAD(List<String> input) {
         return input.stream()
                 .map(s -> s.split(" "))
                 .map(i -> new Instruction(i[0], i[1], (i[0].equals("inp") ? null : i[2])))

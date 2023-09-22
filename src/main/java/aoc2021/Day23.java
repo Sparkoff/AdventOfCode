@@ -108,13 +108,13 @@ public class Day23 extends DayBase<Day23.State, Integer> {
     }
 
     static class Amphipod {
-        static Map<Character,Integer> energy = Map.of(
+        static final Map<Character,Integer> energy = Map.of(
                 'A',1,
                 'B', 10,
                 'C', 100,
                 'D', 1000
         );
-        static List<Integer> roomToHallway = List.of(2, 4, 6, 8);
+        static final List<Integer> roomToHallway = List.of(2, 4, 6, 8);
 
         static int computeMovingEnergy(String amphipod, int steps) {
             return energy.get(amphipod.charAt(0)) * steps;
@@ -189,7 +189,7 @@ public class Day23 extends DayBase<Day23.State, Integer> {
             moves.addAll(hallwayToRoom(amphipod,  state, energy));
             return moves;
         }
-        static List<Move> roomToHallway(String amphipod, State state, int energy) {;
+        static List<Move> roomToHallway(String amphipod, State state, int energy) {
             if (Amphipod.hasFinished(amphipod, state) || !Amphipod.isInRoom(amphipod, state)) return List.of();
 
             int currentRoom = IntStream.range(0, 4)

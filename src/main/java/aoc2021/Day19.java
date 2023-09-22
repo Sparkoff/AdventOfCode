@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Day19 extends DayBase<List<Day19.Scanner>, Integer> {
 
-    List<Scanner> verifiedScanners = new ArrayList<>();
+    final List<Scanner> verifiedScanners = new ArrayList<>();
 
     public Day19() {
         super();
@@ -122,7 +122,7 @@ public class Day19 extends DayBase<List<Day19.Scanner>, Integer> {
             Scanner scanner0 = scanners.remove(0);
             verifiedScanners.add(scanner0);
 
-            while (scanners.size() != 0) {
+            while (!scanners.isEmpty()) {
                 for (int i = 0; i < scanners.size(); i++) {
                     for (Scanner ref : verifiedScanners) {
                         if (getIntersectionCount(ref.distances(), scanners.get(i).distances()) >= edgeCount) {

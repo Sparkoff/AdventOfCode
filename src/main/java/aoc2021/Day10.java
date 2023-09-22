@@ -64,7 +64,7 @@ public class Day10 extends DayBase<List<String>, Long> {
                 chunks.add(c);
             }
         }
-        if (chunks.size() > 0) {
+        if (!chunks.isEmpty()) {
             Collections.reverse(chunks);
             String missing = chunks.stream()
                     .map(c -> switch (c) {

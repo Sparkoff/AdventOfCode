@@ -55,7 +55,7 @@ public class Day9 extends DayBase<Day9.Heatmap, Integer> {
         List<Integer> remains = new ArrayList<>();
         remains.add(lowPoint);
 
-        while (remains.size() > 0) {
+        while (!remains.isEmpty()) {
             int next = remains.remove(0);
 
             if (visitedIndexes.contains(next)) continue;

@@ -59,7 +59,7 @@ public class Day12 extends DayBase<Map<Day12.Cave, List<Day12.Cave>>, Integer> {
         List<List<Cave>> inProgress = new ArrayList<>();
         inProgress.add(List.of(new Cave("start")));
 
-        while (inProgress.size() > 0) {
+        while (!inProgress.isEmpty()) {
             List<Cave> next = inProgress.remove(0);
 
             List<List<Cave>> nextPossibilities = nextStep(next, caveSystem, mode);
@@ -93,7 +93,7 @@ public class Day12 extends DayBase<Map<Day12.Cave, List<Day12.Cave>>, Integer> {
                         !path.contains(c) || noDuplicates)))
                 .toList();
 
-        if (nextCaves.size() == 0) return null;
+        if (nextCaves.isEmpty()) return null;
 
         return nextCaves.stream()
                 .map(c -> Stream.concat(path.stream(), Stream.of(c)).toList())
