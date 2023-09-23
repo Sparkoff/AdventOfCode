@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class Day14 extends DayBase<Day14.PolymerFormula, Long> {
+public class Day14 extends DayBase<Day14.PolymerFormula, Long , Long> {
 
     public Day14() {
         super();

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 
-public class Day9 extends DayBase<String, Integer> {
+public class Day9 extends DayBase<String, Integer , Integer> {
 
     public Day9() {
         super();

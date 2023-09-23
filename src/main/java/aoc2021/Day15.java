@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day15 extends DayBase<Day15.RiskMap, Integer> {
+public class Day15 extends DayBase<Day15.RiskMap, Integer , Integer> {
 
     public Day15() {
         super();

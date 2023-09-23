@@ -30,7 +30,7 @@ class Day19Test {
                 "     |  |  |  D ",
                 "     +B-+  +--+ "));
 
-        assertEquals("38", day.secondStar());
+        assertEquals(38, day.secondStar());
     }
 
     @Test
@@ -38,7 +38,7 @@ class Day19Test {
         Day19 day = new Day19();
 
         assertEquals("MKXOIHZNBL", day.firstStar());
-        assertEquals("17872", day.secondStar());
+        assertEquals(17872, day.secondStar());
     }
 
 }

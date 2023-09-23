@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Day21 extends DayBase<Day21.InitPawn, Long> {
+public class Day21 extends DayBase<Day21.InitPawn, Long , Long> {
 
     public Day21() {
         super();

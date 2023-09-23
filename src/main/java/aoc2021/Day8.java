@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class Day8 extends DayBase<List<Day8.SevenSegment>, Integer> {
+public class Day8 extends DayBase<List<Day8.SevenSegment>, Integer , Integer> {
 
     public Day8() {
         super();

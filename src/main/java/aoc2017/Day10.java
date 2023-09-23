@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day10 extends DayBase<String, String> {
+public class Day10 extends DayBase<String, Integer , String> {
 
     private int hashSize = 256;
 
@@ -32,12 +32,12 @@ public class Day10 extends DayBase<String, String> {
     }
 
     @Override
-    public String firstStar() {
+    public Integer firstStar() {
         String lengths = this.getInput(PuzzleInput::asString);
 
         Step init = new Step(initHash(hashSize));
         List<Integer> hash = computeHash(toListOfInt(lengths), init, hashSize).hash();
-        return String.valueOf(hash.get(0) * hash.get(1));
+        return hash.get(0) * hash.get(1);
     }
 
     @Override

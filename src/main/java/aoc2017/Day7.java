@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class Day7 extends DayBase<Day7.Program, String> {
+public class Day7 extends DayBase<Day7.Program, String, Integer> {
 
     public Day7() {
         super();
@@ -108,10 +108,10 @@ public class Day7 extends DayBase<Day7.Program, String> {
     }
 
     @Override
-    public String secondStar() {
+    public Integer secondStar() {
         Program disk = this.getInput(Day7::parseDisk);
 
-        return String.valueOf(disk.getBalance());
+        return disk.getBalance();
     }
 
     private static Program parseDisk(List<String> input) {

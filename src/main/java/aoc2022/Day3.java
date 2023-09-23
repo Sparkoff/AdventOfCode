@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day3 extends DayBase<List<String>, Integer> {
+public class Day3 extends DayBase<List<String>, Integer , Integer> {
 
     private static final List<String> ALPHABET = List.of(
             ("abcdefghijklmnopqrstuvwxyz" + "abcdefghijklmnopqrstuvwxyz".toUpperCase()).split("")

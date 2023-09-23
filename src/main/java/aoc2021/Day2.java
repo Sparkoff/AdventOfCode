@@ -8,7 +8,7 @@ import java.util.List;
 import static java.lang.Integer.parseInt;
 
 
-public class Day2 extends DayBase<List<Day2.Command>, Integer> {
+public class Day2 extends DayBase<List<Day2.Command>, Integer , Integer> {
 
     public Day2() {
         super();

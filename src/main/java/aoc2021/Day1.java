@@ -6,7 +6,7 @@ import common.PuzzleInput;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day1 extends DayBase<List<Integer>, Integer> {
+public class Day1 extends DayBase<List<Integer>, Integer , Integer> {
 
     public Day1() {
         super();

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Day20 extends DayBase<List<Day20.Particle>, Integer> {
+public class Day20 extends DayBase<List<Day20.Particle>, Integer , Integer> {
 
     public Day20() {
         super();
