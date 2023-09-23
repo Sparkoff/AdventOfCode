@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class Day22 extends DayBase<Set<Day22.Point>, Integer> {
+public class Day22 extends DayBase<Set<Day22.Point>, Integer , Integer> {
 
     public Day22() {
         super();

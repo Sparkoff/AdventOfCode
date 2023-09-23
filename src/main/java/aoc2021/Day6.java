@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day6 extends DayBase<Map<Integer, Long>, Long> {
+public class Day6 extends DayBase<Map<Integer, Long>, Long , Long> {
 
     public Day6() {
         super();

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Day19 extends DayBase<Map<Day19.Point, String>, String> {
+public class Day19 extends DayBase<Map<Day19.Point, String>, String, Integer> {
 
     public Day19() {
         super();
@@ -38,10 +38,10 @@ public class Day19 extends DayBase<Map<Day19.Point, String>, String> {
     }
 
     @Override
-    public String secondStar() {
+    public Integer secondStar() {
         Map<Day19.Point, String> map = this.getInput(Day19::parseMap);
 
-        return String.valueOf(explorePath(map).length());
+        return explorePath(map).length();
     }
 
     private static Explore explorePath(Map<Day19.Point, String> map) {

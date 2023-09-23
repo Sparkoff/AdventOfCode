@@ -44,7 +44,7 @@ class Day7Test {
                 "gyxo (61)",
                 "cntj (57)"));
 
-        assertEquals("60", day.secondStar());
+        assertEquals(60, day.secondStar());
     }
 
     @Test
@@ -52,7 +52,7 @@ class Day7Test {
         Day7 day = new Day7();
 
         assertEquals("cyrupz", day.firstStar());
-        assertEquals("193", day.secondStar());
+        assertEquals(193, day.secondStar());
     }
 
 }

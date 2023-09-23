@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 
-public class Day3 extends DayBase<Integer, Integer> {
+public class Day3 extends DayBase<Integer, Integer , Integer> {
 
     public Day3() {
         super();

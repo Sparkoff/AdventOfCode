@@ -14,7 +14,7 @@ class Day10Test {
         Day10 day = new Day10(List.of("3,4,1,5"));
         day.setHashSize(5);
 
-        assertEquals("12", day.firstStar());
+        assertEquals(12, day.firstStar());
     }
 
     @Test
@@ -29,7 +29,7 @@ class Day10Test {
     void test_real_inputs() {
         Day10 day = new Day10();
 
-        assertEquals("29240", day.firstStar());
+        assertEquals(29240, day.firstStar());
         assertEquals("4db3799145278dc9f73dcdbc680bd53d", day.secondStar());
     }
 

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Day16 extends DayBase<List<Day16.DanceMove>, String> {
+public class Day16 extends DayBase<List<Day16.DanceMove>, String , String> {
 
     public Day16() {
         super();

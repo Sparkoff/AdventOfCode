@@ -9,7 +9,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 
-public class Day18 extends DayBase<List<Day18.Instruction>, Integer> {
+public class Day18 extends DayBase<List<Day18.Instruction>, Integer , Integer> {
 
     public Day18() {
         super();

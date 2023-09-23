@@ -1,8 +1,8 @@
 package common;
 
-public interface PuzzleInterface<T> {
+public interface PuzzleInterface<FirstOutput, SecondOutput> {
 
-    T firstStar();
-    T secondStar();
+    FirstOutput firstStar();
+    SecondOutput secondStar();
 
 }

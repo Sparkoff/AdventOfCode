@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class Day21 extends DayBase<List<Day21.Rule>, Integer> {
+public class Day21 extends DayBase<List<Day21.Rule>, Integer , Integer> {
 
     public Day21() {
         super();

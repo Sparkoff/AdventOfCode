@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 
-public class Day9 extends DayBase<Day9.Heatmap, Integer> {
+public class Day9 extends DayBase<Day9.Heatmap, Integer , Integer> {
 
     public Day9() {
         super();

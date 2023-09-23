@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Day12 extends DayBase<Map<Day12.Cave, List<Day12.Cave>>, Integer> {
+public class Day12 extends DayBase<Map<Day12.Cave, List<Day12.Cave>>, Integer , Integer> {
 
     public Day12() {
         super();
