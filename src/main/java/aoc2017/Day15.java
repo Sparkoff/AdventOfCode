@@ -5,7 +5,7 @@ import common.DayBase;
 import java.util.List;
 
 
-public class Day15 extends DayBase<Day15.Generators, Integer , Integer> {
+public class Day15 extends DayBase<Day15.Generators, Integer, Integer> {
 
     public Day15() {
         super();

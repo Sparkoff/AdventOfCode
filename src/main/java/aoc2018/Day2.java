@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class Day2 extends DayBase<List<String>, String> {
+public class Day2 extends DayBase<List<String>, Integer, String> {
 
     public Day2() {
         super();
@@ -21,7 +21,7 @@ public class Day2 extends DayBase<List<String>, String> {
     record Checksum(boolean pair, boolean tuple) {}
 
     @Override
-    public String firstStar() {
+    public Integer firstStar() {
         List<String> boxIds = this.getInput(PuzzleInput::asStringList);
 
         List<Checksum> checksums = boxIds.stream()
@@ -31,9 +31,13 @@ public class Day2 extends DayBase<List<String>, String> {
                 .map(freq -> new Checksum(freq.contains(2L), freq.contains(3L)))
                 .toList();
 
-        return String.valueOf(
-                checksums.stream().filter(Checksum::pair).count() *
-                        checksums.stream().filter(Checksum::tuple).count()
+        return Math.toIntExact(
+                checksums.stream()
+                        .filter(Checksum::pair)
+                        .count() *
+                checksums.stream()
+                        .filter(Checksum::tuple)
+                        .count()
         );
     }
 

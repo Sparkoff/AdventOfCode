@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class Day18 extends DayBase<List<String>, Integer , Integer> {
+public class Day18 extends DayBase<List<String>, Integer, Integer> {
 
     public Day18() {
         super();
@@ -308,7 +308,7 @@ public class Day18 extends DayBase<List<String>, Integer , Integer> {
 }
 
 
-/*public class Day18 extends DayBase<List<String>, Integer , Integer> {
+/*public class Day18 extends DayBase<List<String>, Integer, Integer> {
 
     public Day18() {
         super();

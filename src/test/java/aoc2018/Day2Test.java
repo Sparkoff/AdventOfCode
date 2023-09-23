@@ -19,7 +19,7 @@ class Day2Test {
                 "abcdee",
                 "ababab"));
 
-        assertEquals("12", day.firstStar());
+        assertEquals(12, day.firstStar());
     }
 
     @Test
@@ -39,7 +39,7 @@ class Day2Test {
     void test_real_inputs() {
         Day2 day = new Day2();
 
-        assertEquals("6150", day.firstStar());
+        assertEquals(6150, day.firstStar());
         assertEquals("rteotyxzbodglnpkudawhijsc", day.secondStar());
     }
 

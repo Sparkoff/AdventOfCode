@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day13 extends DayBase<Day13.Origami, Integer , Integer> {
+public class Day13 extends DayBase<Day13.Origami, Integer, Integer> {
 
     public Day13() {
         super();

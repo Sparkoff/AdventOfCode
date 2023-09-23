@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Day24 extends DayBase<List<Day24.Instruction>, Long , Long> {
+public class Day24 extends DayBase<List<Day24.Instruction>, Long, Long> {
 
     public Day24() {
         super();

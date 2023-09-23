@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Day24 extends DayBase<List<Day24.Component>, Integer , Integer> {
+public class Day24 extends DayBase<List<Day24.Component>, Integer, Integer> {
 
     public Day24() {
         super();

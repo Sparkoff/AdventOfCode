@@ -3,13 +3,12 @@ package aoc2018;
 import common.DayBase;
 import common.PuzzleInput;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
-public class Day1 extends DayBase<List<Integer>, Integer> {
+public class Day1 extends DayBase<List<Integer>, Integer, Integer> {
 
     public Day1() {
         super();

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Day25 extends DayBase<Day25.SeaFloor, Integer , Integer> {
+public class Day25 extends DayBase<Day25.SeaFloor, Integer, Integer> {
 
     public Day25() {
         super();

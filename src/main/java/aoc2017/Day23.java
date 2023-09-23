@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Day23 extends DayBase<List<Day23.Instruction>, Integer , Integer> {
+public class Day23 extends DayBase<List<Day23.Instruction>, Integer, Integer> {
 
     public Day23() {
         super();

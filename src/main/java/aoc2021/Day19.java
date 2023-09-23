@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class Day19 extends DayBase<List<Day19.Scanner>, Integer , Integer> {
+public class Day19 extends DayBase<List<Day19.Scanner>, Integer, Integer> {
 
     final List<Scanner> verifiedScanners = new ArrayList<>();
 

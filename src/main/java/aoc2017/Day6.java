@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class Day6 extends DayBase<List<Integer>, Integer , Integer> {
+public class Day6 extends DayBase<List<Integer>, Integer, Integer> {
 
     public Day6() {
         super();

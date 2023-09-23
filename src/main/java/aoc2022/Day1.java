@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class Day1 extends DayBase<List<Day1.Elf>, Integer , Integer> {
+public class Day1 extends DayBase<List<Day1.Elf>, Integer, Integer> {
 
     public Day1() {
         super();
