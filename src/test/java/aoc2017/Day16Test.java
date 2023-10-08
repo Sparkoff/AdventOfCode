@@ -15,14 +15,14 @@ class Day16Test {
     void test_first_star() {
         Day16 day = new Day16(List.of("s1,x3/4,pe/b"));
 
-        assertEquals("baedc", day.firstStar());
+        assertEquals("baedc", day.testMode().firstStar());
     }
 
     @Test
     void test_second_star() {
         Day16 day = new Day16(List.of("s1,x3/4,pe/b"));
 
-        assertEquals("ceadb", day.secondStar());
+        assertEquals("ceadb", day.testMode().secondStar());
     }
 
     @Test

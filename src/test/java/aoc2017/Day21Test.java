@@ -16,7 +16,7 @@ class Day21Test {
         Day21 day = new Day21(List.of("../.# => ##./#../...",
                 ".#./..#/### => #..#/..../..../#..#"));
 
-        assertEquals(12, day.firstStar());
+        assertEquals(12, day.testMode().firstStar());
     }
 
     @Test
