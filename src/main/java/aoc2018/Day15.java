@@ -141,7 +141,7 @@ public class Day15 extends DayBase<Day15.Cavern, Integer, Integer> {
         }
     }
 
-    record PathStep(Point p, int weight, Point origin) implements Comparable<PathStep> {
+    record PathStep(Point p, int weight, Point target) implements Comparable<PathStep> {
         public PathStep(Point p) {
             this(p, 0, p);
         }
@@ -149,7 +149,7 @@ public class Day15 extends DayBase<Day15.Cavern, Integer, Integer> {
         @Override
         public int compareTo(PathStep other) {
             return Comparator.comparingInt(PathStep::weight)
-                    .thenComparing(PathStep::origin)
+                    .thenComparing(PathStep::target)
                     .compare(this, other);
         }
     }
@@ -332,7 +332,7 @@ public class Day15 extends DayBase<Day15.Cavern, Integer, Integer> {
             List<PathStep> nexts = current.p().getAdjacentPoints()
                     .stream()
                     .filter(p -> cave.inMap(p) && !nonFree.contains(p))
-                    .map(p -> new PathStep(p, current.weight() + 1, current.origin()))
+                    .map(p -> new PathStep(p, current.weight() + 1, current.target()))
                     .toList();
 
             for (PathStep next : nexts) {
