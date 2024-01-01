@@ -7,7 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Day16 extends DayBase<List<Day16.DanceMove>, String , String> {
+public class Day16 extends DayBase<List<Day16.DanceMove>, String, String> {
+
+    private String DANCERS = "abcdefghijklmnop";
+    private int danceLenth = (int) 1E9;
 
     public Day16() {
         super();
@@ -15,6 +18,12 @@ public class Day16 extends DayBase<List<Day16.DanceMove>, String , String> {
 
     public Day16(List<String> input) {
         super(input);
+    }
+
+    public Day16 testMode() {
+        DANCERS = "abcde";
+        danceLenth = 2;
+        return this;
     }
 
     enum MoveType {SPIN, EXCHANGE, PARTNER}
@@ -58,10 +67,7 @@ public class Day16 extends DayBase<List<Day16.DanceMove>, String , String> {
     public String firstStar() {
         List<DanceMove> moves = this.getInput(Day16::parseDance);
 
-        String dancers = "abcdefghijklmnop";
-        if (moves.size() == 3) {
-            dancers = "abcde";
-        }
+        String dancers = DANCERS;
 
         for (DanceMove move : moves) {
             dancers = move.apply(dancers);
@@ -74,12 +80,7 @@ public class Day16 extends DayBase<List<Day16.DanceMove>, String , String> {
     public String secondStar() {
         List<DanceMove> moves = this.getInput(Day16::parseDance);
 
-        String dancers = "abcdefghijklmnop";
-        int danceLenth = (int) 1E9;
-        if (moves.size() == 3) {
-            dancers = "abcde";
-            danceLenth = 2;
-        }
+        String dancers = DANCERS;
 
         List<String> steps = new ArrayList<>();
         steps.add(dancers);

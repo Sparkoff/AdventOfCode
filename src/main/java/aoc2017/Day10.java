@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day10 extends DayBase<String, Integer , String> {
+public class Day10 extends DayBase<String, Integer, String> {
 
     private int hashSize = 256;
 

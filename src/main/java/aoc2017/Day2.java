@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class Day2 extends DayBase<List<List<Integer>>, Integer , Integer> {
+public class Day2 extends DayBase<List<List<Integer>>, Integer, Integer> {
 
     public Day2() {
         super();

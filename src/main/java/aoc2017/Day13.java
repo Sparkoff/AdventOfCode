@@ -5,7 +5,7 @@ import common.DayBase;
 import java.util.List;
 
 
-public class Day13 extends DayBase<List<Day13.Scanner>, Integer , Integer> {
+public class Day13 extends DayBase<List<Day13.Scanner>, Integer, Integer> {
 
     public Day13() {
         super();

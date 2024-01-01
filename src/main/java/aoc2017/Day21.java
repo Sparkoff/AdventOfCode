@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class Day21 extends DayBase<List<Day21.Rule>, Integer , Integer> {
+public class Day21 extends DayBase<List<Day21.Rule>, Integer, Integer> {
+
+    private boolean testMode = false;
 
     public Day21() {
         super();
@@ -15,6 +17,11 @@ public class Day21 extends DayBase<List<Day21.Rule>, Integer , Integer> {
 
     public Day21(List<String> input) {
         super(input);
+    }
+
+    public Day21 testMode() {
+        testMode = true;
+        return this;
     }
 
     private static final List<List<Integer>> MASKS_2 = List.of(
@@ -72,9 +79,9 @@ public class Day21 extends DayBase<List<Day21.Rule>, Integer , Integer> {
     public Integer firstStar() {
         List<Rule> rules = this.getInput(Day21::parseRules);
 
-        return pixelOnCount(rules.size() > 2 ?
-                fractalArt(rules, 5):
-                fractalArt(rules, 2)
+        return pixelOnCount(testMode ?
+                fractalArt(rules, 2):
+                fractalArt(rules, 5)
         );
     }
 

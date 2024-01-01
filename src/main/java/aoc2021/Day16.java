@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class Day16 extends DayBase<String, Long , Long> {
+public class Day16 extends DayBase<String, Long, Long> {
 
     public Day16() {
         super();

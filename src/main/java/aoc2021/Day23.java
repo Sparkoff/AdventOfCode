@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
-public class Day23 extends DayBase<Day23.State, Integer , Integer> {
+public class Day23 extends DayBase<Day23.State, Integer, Integer> {
 
     public Day23() {
         super();

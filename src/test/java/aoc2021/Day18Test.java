@@ -1,5 +1,6 @@
 package aoc2021;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
+@DisplayName("2021 Day18")
 class Day18Test {
 
     @Test

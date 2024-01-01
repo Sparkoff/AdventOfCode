@@ -9,7 +9,21 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class Day13 extends DayBase<Day13.Origami, Integer , Integer> {
+public class Day13 extends DayBase<Day13.Origami, Integer, String> {
+
+    private static final String O = """
+            #####
+            #...#
+            #...#
+            #...#
+            #####""";
+    private static final String RHALRCRA = """
+            ###..#..#..##..#....###...##..###...##.
+            #..#.#..#.#..#.#....#..#.#..#.#..#.#..#
+            #..#.####.#..#.#....#..#.#....#..#.#..#
+            ###..#..#.####.#....###..#....###..####
+            #.#..#..#.#..#.#....#.#..#..#.#.#..#..#
+            #..#.#..#.#..#.####.#..#..##..#..#.#..#""";
 
     public Day13() {
         super();
@@ -37,7 +51,7 @@ public class Day13 extends DayBase<Day13.Origami, Integer , Integer> {
     }
 
     @Override
-    public Integer secondStar() {
+    public String secondStar() {
         Origami origami = this.getInput(Day13::parseOrigami);
 
         List<Dot> dots = origami.dots;
@@ -75,11 +89,19 @@ public class Day13 extends DayBase<Day13.Origami, Integer , Integer> {
             paper.get(dot.y).set(dot.x, "#");
         }
 
-        for (List<String> line : paper) {
-            System.out.println(String.join("", line));
-        }
+        String paperDraw = String.join(
+                "\n",
+                paper.stream()
+                        .map(l -> String.join("", l))
+                        .toList()
+        );
+        System.out.println(paperDraw);
 
-        return null;
+        return switch (paperDraw) {
+            case O -> "O";
+            case RHALRCRA -> "RHALRCRA";
+            default -> "error";
+        };
     }
 
     private static List<Dot> foldPaper(List<Dot> dots, Fold fold) {

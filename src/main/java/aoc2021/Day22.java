@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Day22 extends DayBase<List<Day22.Instruction>, Long , Long> {
+public class Day22 extends DayBase<List<Day22.Instruction>, Long, Long> {
 
     public Day22() {
         super();

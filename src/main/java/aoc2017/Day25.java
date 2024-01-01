@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class Day25 extends DayBase<Day25.Blueprint, Integer , Integer> {
+public class Day25 extends DayBase<Day25.Blueprint, Integer, Integer> {
 
     public Day25() {
         super();

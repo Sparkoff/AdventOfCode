@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class Day20 extends DayBase<Day20.Image, Integer , Integer> {
+public class Day20 extends DayBase<Day20.Image, Integer, Integer> {
 
     public Day20() {
         super();

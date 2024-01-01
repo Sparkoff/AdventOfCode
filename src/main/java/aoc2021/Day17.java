@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Day17 extends DayBase<Day17.Target, Integer , Integer> {
+public class Day17 extends DayBase<Day17.Target, Integer, Integer> {
 
     public Day17() {
         super();

@@ -1,13 +1,14 @@
 package aoc2021;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 
+@DisplayName("2021 Day13")
 class Day13Test {
 
     @Test
@@ -63,7 +64,7 @@ class Day13Test {
                 "fold along x=5"
         ));
 
-        assertNull(day.secondStar());
+        assertEquals("O", day.secondStar());
     }
 
     @Test
@@ -71,7 +72,7 @@ class Day13Test {
         Day13 day = new Day13();
 
         assertEquals(763, day.firstStar());
-        assertNull(day.secondStar()); //RHALRCRA
+        assertEquals("RHALRCRA", day.secondStar());
     }
 
 }

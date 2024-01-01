@@ -1,5 +1,6 @@
 package aoc2017;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
+@DisplayName("2017 Day21")
 class Day21Test {
 
     @Test
@@ -14,7 +16,7 @@ class Day21Test {
         Day21 day = new Day21(List.of("../.# => ##./#../...",
                 ".#./..#/### => #..#/..../..../#..#"));
 
-        assertEquals(12, day.firstStar());
+        assertEquals(12, day.testMode().firstStar());
     }
 
     @Test
