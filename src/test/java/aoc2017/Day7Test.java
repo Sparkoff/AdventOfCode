@@ -56,5 +56,4 @@ class Day7Test {
         assertEquals("cyrupz", day.firstStar());
         assertEquals(193, day.secondStar());
     }
-
 }

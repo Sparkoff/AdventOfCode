@@ -34,5 +34,4 @@ class Day10Test {
         assertEquals(29240, day.firstStar());
         assertEquals("4db3799145278dc9f73dcdbc680bd53d", day.secondStar());
     }
-
 }

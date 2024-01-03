@@ -108,5 +108,4 @@ class Day14Test {
         assertEquals("1631191756", day.firstStar());
         assertEquals(20219475, day.secondStar());
     }
-
 }

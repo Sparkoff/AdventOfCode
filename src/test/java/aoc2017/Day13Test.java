@@ -38,5 +38,4 @@ class Day13Test {
         assertEquals(3184, day.firstStar());
         assertEquals(3878062, day.secondStar());
     }
-
 }

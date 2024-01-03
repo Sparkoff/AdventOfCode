@@ -92,5 +92,4 @@ class Day10Test {
         assertEquals("NBRALZPH", day.firstStar());
         assertEquals(10454, day.secondStar());
     }
-
 }

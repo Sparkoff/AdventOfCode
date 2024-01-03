@@ -32,5 +32,4 @@ class Day16Test {
         assertEquals("pkgnhomelfdibjac", day.firstStar());
         assertEquals("pogbjfihclkemadn", day.secondStar());
     }
-
 }

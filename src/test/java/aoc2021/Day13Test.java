@@ -74,5 +74,4 @@ class Day13Test {
         assertEquals(763, day.firstStar());
         assertEquals("RHALRCRA", day.secondStar());
     }
-
 }

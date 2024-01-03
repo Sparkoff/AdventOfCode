@@ -53,5 +53,4 @@ class Day25Test {
         assertEquals(5744, day.firstStar());
         assertEquals(2017, day.secondStar());
     }
-
 }
