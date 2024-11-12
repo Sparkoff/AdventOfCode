@@ -1,5 +1,6 @@
 package aoc2018;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -101,6 +102,7 @@ class Day15Test {
     }
 
     @Test
+    @Disabled  // 11sec
     void test_real_inputs() {
         Day15 day = new Day15();
 

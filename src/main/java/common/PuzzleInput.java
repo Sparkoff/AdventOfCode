@@ -18,11 +18,11 @@ public class PuzzleInput<T> {
 
     public PuzzleInput(String packageName, String className) {
         try {
+            String file = String.format("%s/%s.txt", packageName, className.toLowerCase());
             this.originalInput = IOUtils.readLines(
-                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(
-                            String.format("%s/%s.txt", packageName, className.toLowerCase())
-                    )),
-                    StandardCharsets.UTF_8);
+                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(file)),
+                    StandardCharsets.UTF_8
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
