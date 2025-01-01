@@ -102,7 +102,7 @@ class Day15Test {
     }
 
     @Test
-    @Disabled  // 11sec
+    @Disabled("Test disabled due to long duration: 11sec")
     void test_real_inputs() {
         Day15 day = new Day15();
 

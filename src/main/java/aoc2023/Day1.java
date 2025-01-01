@@ -25,7 +25,6 @@ public class Day1 extends DayBase<List<String>, Integer, Integer> {
     public Integer firstStar() {
         List<String> calibration = this.getInput(PuzzleInput::asStringList);
 
-
         return calibration.stream()
                 .mapToInt(l -> {
                     StringBuilder number = new StringBuilder();

@@ -24,7 +24,7 @@ class Day23Test {
     }
 
     @Test
-    @Disabled  // 18sec
+    @Disabled("Test disabled due to long duration: 18sec")
     void test_second_star() {
         Day23 day = new Day23(List.of("#############",
                 "#...........#",
@@ -36,7 +36,7 @@ class Day23Test {
     }
 
     @Test
-    @Disabled  // 14sec
+    @Disabled("Test disabled due to long duration: 14sec")
     void test_real_inputs() {
         Day23 day = new Day23();
 

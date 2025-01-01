@@ -84,7 +84,7 @@ public class Day12 extends DayBase<List<Day12.ConditionRecord>, Integer, Long> {
         return arrangements;
     }
 
-    // explore using Non-Deterministic Finite Automata
+    // explore using Non-Deterministic Finite Automata (NFA)
     //  https://swtch.com/~rsc/regexp/regexp1.html
     //  https://research.swtch.com/glob
     private long computeArrangementsNFA(ConditionRecord conditionRecord) {
