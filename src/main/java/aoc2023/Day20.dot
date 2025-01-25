@@ -1,0 +1,120 @@
+strict digraph {
+    rq [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    nf [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    pc [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    xt [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    nt [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    hc [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    rd [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    ml [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    sq [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    jg [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    xl [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    kl [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    nd [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    rg [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    mf [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    rz [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    kk [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    nb [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    pr [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    zp [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    fl [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    tb [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    bh [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    nh [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    lk [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    cp [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    ln [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    xp [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    bc [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    lj [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    vz [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    vl [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    gp [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    hd [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    fq [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    pk [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    cs [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    sn [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    kq [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    zb [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    lv [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    qj [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    fd [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    df [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    broadcaster [shape="diamond"]
+    bq [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    kb [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    cn [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    qq [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    mb [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    jd [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    sj [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    pp [shape="polygon" style="filled" fillcolor="#ff7f0e"]
+    sm [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    ch [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    bj [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    fr [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+    mr [shape="ellipse" style="filled" fillcolor="#1f77b4"]
+
+
+    rq -> { ch sj }
+    nf -> { sm rg }
+    pc -> { rz zp }
+    xt -> { bc }
+    nt -> { kq sj }
+    hc -> { kb zp }
+    rd -> { lk }
+    ml -> { pp xt }
+    sq -> { kl sj }
+    jg -> { fl rg }
+    xl -> { df }
+    kl -> { mb sj }
+    nd -> { rg jg }
+    rg -> { cs zb cp vz gp }
+    mf -> { zp }
+    rz -> { zp fr }
+    kk -> { rg bj }
+    nb -> { qj }
+    pr -> { pp }
+    zp -> { vl lk rd kb xl }
+    fl -> { nf rg }
+    tb -> { pk pp }
+    bh -> { pp pr }
+    nh -> { sj rq }
+    lk -> { hc }
+    cp -> { kk }
+    ln -> { df }
+    xp -> { df }
+    bc -> { nb pp }
+    lj -> { rg }
+    vz -> { nd }
+    vl -> { lv zp }
+    gp -> { df }
+    hd -> { pp bq }
+    fq -> { pp bh }
+    pk -> { fq pp }
+    cs -> { zb rg }
+    sn -> { fd }
+    kq -> { sj qq }
+    zb -> { vz }
+    lv -> { zp rd }
+    qj -> { pp hd }
+    fd -> { nt }
+    df -> { rx }
+    broadcaster -> { vl cs cn ml }
+    bq -> { tb }
+    kb -> { pc }
+    cn -> { sn sj }
+    qq -> { sq }
+    mb -> { sj nh }
+    jd -> { zp mf }
+    sj -> { xp qq cn fd sn }
+    pp -> { ln ml xt bq nb }
+    sm -> { rg cp }
+    ch -> { sj }
+    bj -> { lj rg }
+    fr -> { zp mr }
+    mr -> { zp jd }
+}

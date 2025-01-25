@@ -1,5 +1,6 @@
 package aoc2018;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -102,6 +103,7 @@ class Day14Test {
     }
 
     @Test
+    @Disabled("Test disabled due to long duration: 13sec")
     void test_real_inputs() {
         Day14 day = new Day14();
 

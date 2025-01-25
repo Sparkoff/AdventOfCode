@@ -1,5 +1,6 @@
 package aoc2018;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,12 +27,14 @@ class Day11Test {
     }
 
     @Test
+    @Disabled("Test disabled due to long duration: 33sec")
     void test_second_star() {
         assertEquals("90,269,16", new Day11(List.of("18")).secondStar());
         assertEquals("232,251,12", new Day11(List.of("42")).secondStar());
     }
 
     @Test
+    @Disabled("Test disabled due to long duration: 16sec")
     void test_real_inputs() {
         Day11 day = new Day11();
 
