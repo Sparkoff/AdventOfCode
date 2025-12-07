@@ -1,10 +1,10 @@
 package aoc2021;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,14 +18,14 @@ class Day25Test {
         Day25.SeaFloor init = new Day25.SeaFloor(
                 0,
                 11,
-                List.of(
+                Set.of(
                         new Day25.Coord(3, 0),
                         new Day25.Coord(4, 0),
                         new Day25.Coord(5, 0),
                         new Day25.Coord(6, 0),
                         new Day25.Coord(7, 0)
                 ),
-                List.of()
+                Set.of()
         );
 
         Day25.SeaFloor step1 = Day25.computeNextStep(init);
@@ -33,7 +33,7 @@ class Day25Test {
 
         assertEquals(0, step2.height());
         assertEquals(11, step2.width());
-        assertEquals(List.of(
+        assertEquals(Set.of(
                 new Day25.Coord(3, 0),
                 new Day25.Coord(4, 0),
                 new Day25.Coord(5, 0),
@@ -49,11 +49,11 @@ class Day25Test {
         Day25.SeaFloor init = new Day25.SeaFloor(
                 4,
                 10,
-                List.of(
+                Set.of(
                         new Day25.Coord(1, 1),
                         new Day25.Coord(7, 2)
                 ),
-                List.of(
+                Set.of(
                         new Day25.Coord(2, 1),
                         new Day25.Coord(7, 1)
                 )
@@ -63,11 +63,11 @@ class Day25Test {
 
         assertEquals(4, step1.height());
         assertEquals(10, step1.width());
-        assertEquals(List.of(
+        assertEquals(Set.of(
                 new Day25.Coord(1, 1),
                 new Day25.Coord(8, 2)
         ), step1.east());
-        assertEquals(List.of(
+        assertEquals(Set.of(
                 new Day25.Coord(2, 2),
                 new Day25.Coord(7, 2)
         ), step1.south());
@@ -79,13 +79,13 @@ class Day25Test {
         Day25.SeaFloor init = new Day25.SeaFloor(
                 7,
                 7,
-                List.of(
+                Set.of(
                         new Day25.Coord(3, 0),
                         new Day25.Coord(6, 2),
                         new Day25.Coord(6, 3),
                         new Day25.Coord(6, 4)
                 ),
-                List.of(
+                Set.of(
                         new Day25.Coord(0, 3),
                         new Day25.Coord(2, 6),
                         new Day25.Coord(3, 6),
@@ -100,13 +100,13 @@ class Day25Test {
 
         assertEquals(7, step4.height());
         assertEquals(7, step4.width());
-        assertEquals(List.of(
+        assertEquals(Set.of(
                 new Day25.Coord(0, 0),
                 new Day25.Coord(2, 2),
                 new Day25.Coord(1, 3),
                 new Day25.Coord(3, 4)
         ), step4.east());
-        assertEquals(List.of(
+        assertEquals(Set.of(
                 new Day25.Coord(0, 6),
                 new Day25.Coord(2, 1),
                 new Day25.Coord(3, 3),
@@ -131,7 +131,6 @@ class Day25Test {
     }
 
     @Test
-    @Disabled("Test disabled due to long duration: 34sec")
     void test_real_inputs() {
         Day25 day = new Day25();
 

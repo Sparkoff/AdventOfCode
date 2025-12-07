@@ -2,14 +2,14 @@ package aoc2023;
 
 import common.DayBase;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Stream;
 
 
 public class Day23 extends DayBase<Day23.TrailMap, Integer, Integer> {
@@ -34,22 +34,6 @@ public class Day23 extends DayBase<Day23.TrailMap, Integer, Integer> {
         }
     }
     record Node(Pt p, int l) {}
-    record Path(List<Pt> visited, int l) {
-        public Path(Pt start) {
-            this(List.of(start), 0);
-        }
-
-        public Pt loc() {
-            return visited.get(0);
-        }
-
-        public Path walk(Node n) {
-            return new Path(
-                    Stream.concat(Stream.of(n.p()), visited.stream()).toList(),
-                    l + n.l()
-            );
-        }
-    }
 
     record TrailMap(List<String> map, int width, int height) {
         public TrailMap(List<String> map) {
@@ -113,13 +97,13 @@ public class Day23 extends DayBase<Day23.TrailMap, Integer, Integer> {
     }
 
     private Map<Pt, List<Node>> computeGraph(TrailMap map, boolean slope) {
-        List<Pt> nexts = new ArrayList<>();
+        Queue<Pt> nexts = new ArrayDeque<>();
         Set<Pt> visited = new HashSet<>();
         Map<Pt, List<Node>> graph = new HashMap<>();
 
         nexts.add(map.start());
         while (!nexts.isEmpty()) {
-            Pt current = nexts.remove(0);
+            Pt current = nexts.poll();
 
             if (visited.contains(current)) {
                 continue;
@@ -166,23 +150,26 @@ public class Day23 extends DayBase<Day23.TrailMap, Integer, Integer> {
     }
 
     private int longestHike(Map<Pt, List<Node>> graph, Pt start, Pt end) {
-        return Collections.max(exploreGraph(graph, new Path(List.of(start), 0), end));
+        return exploreGraph(graph, start, end, 0, new HashSet<>(Set.of(start)));
     }
-    private List<Integer> exploreGraph(Map<Pt, List<Node>> graph, Path current, Pt end) {
-        if (current.loc().equals(end)) {
-            return List.of(current.l());
+
+    private int exploreGraph(Map<Pt, List<Node>> graph, Pt current, Pt end, int currentLength, Set<Pt> visited) {
+        if (current.equals(end)) {
+            return currentLength;
         }
 
-        List<Integer> lengths = new ArrayList<>();
-        for (Node n : graph.get(current.loc())) {
-            if (!current.visited().contains(n.p())) {
-                lengths.addAll(exploreGraph(graph, current.walk(n), end));
+        int maxLength = 0;
+        for (Node neighbor : graph.get(current)) {
+            if (visited.add(neighbor.p())) { // If the point was not already visited, add it and proceed
+                int length = exploreGraph(graph, neighbor.p(), end, currentLength + neighbor.l(), visited);
+                if (length > maxLength) {
+                    maxLength = length;
+                }
+                visited.remove(neighbor.p()); // Backtrack: remove the point for other paths to use
             }
         }
-
-        return lengths;
+        return maxLength;
     }
-
 
     private static TrailMap parseTrailMap(List<String> input) {
         return new TrailMap(input);

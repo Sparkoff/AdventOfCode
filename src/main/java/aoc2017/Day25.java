@@ -5,7 +5,9 @@ import common.DayBase;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public class Day25 extends DayBase<Day25.Blueprint, Integer, Integer> {
@@ -18,20 +20,10 @@ public class Day25 extends DayBase<Day25.Blueprint, Integer, Integer> {
         super(input);
     }
 
-    record Blueprint(String initState, int steps, List<State> states) {
-        public State getState(String label) {
-            return states.stream()
-                    .filter(s -> s.label().equals(label))
-                    .findFirst()
-                    .orElseThrow();
-        }
-    }
-    record State(String label, List<Instruction> instructions) {
+    record Blueprint(String initState, int steps, Map<String, State> states) {}
+    record State(String label, Instruction[] instructions) {
         public Instruction getInstruction(int currentValue) {
-            return instructions.stream()
-                    .filter(i -> i.current() == currentValue)
-                    .findFirst()
-                    .orElseThrow();
+            return instructions[currentValue];
         }
     }
     record Instruction(int current, int toWrite, int toMove, String nextState) {}
@@ -40,25 +32,24 @@ public class Day25 extends DayBase<Day25.Blueprint, Integer, Integer> {
     public Integer firstStar() {
         Blueprint turingBlueprint = this.getInput(Day25::parseTuringBlueprint);
 
-        int currentIdx = 0;
-        String currentState = turingBlueprint.initState();
-        Set<Integer> ones = new HashSet<>();
+        int cursor = 0;
+        State currentState = turingBlueprint.states().get(turingBlueprint.initState());
+        HashSet<Integer> tape = new HashSet<>();
 
         for (int i = 0; i < turingBlueprint.steps(); i++) {
-            Instruction instruction = turingBlueprint.getState(currentState)
-                    .getInstruction(ones.contains(currentIdx) ? 1 : 0);
+            Instruction instruction = currentState.getInstruction(tape.contains(cursor) ? 1 : 0);
 
             if (instruction.toWrite() == 1) {
-                ones.add(currentIdx);
+                tape.add(cursor);
             } else {
-                ones.remove(currentIdx);
+                tape.remove(cursor);
             }
 
-            currentIdx += instruction.toMove();
-            currentState = instruction.nextState();
+            cursor += instruction.toMove();
+            currentState = turingBlueprint.states().get(instruction.nextState());
         }
 
-        return ones.size();
+        return tape.size();
     }
 
     @Override
@@ -66,35 +57,39 @@ public class Day25 extends DayBase<Day25.Blueprint, Integer, Integer> {
         return 2017;
     }
 
+
     private static Blueprint parseTuringBlueprint(List<String> input) {
         input = new ArrayList<>(input);
         String initState = extract(input.remove(0));
         int steps = extractAsInt(input.remove(0), -2);
 
-        List<State> states = new ArrayList<>();
+        List<State> stateList = new ArrayList<>();
         while (!input.isEmpty()) {
             input.remove(0);
-            states.add(new State(
+            stateList.add(new State(
                     extract(input.remove(0)),
-                    List.of(
-                            new Instruction(
-                                    extractAsInt(input.remove(0)),
-                                    extractAsInt(input.remove(0)),
-                                    extract(input.remove(0)).equals("right") ? 1 : -1,
-                                    extract(input.remove(0))
-                            ),
-                            new Instruction(
-                                    extractAsInt(input.remove(0)),
-                                    extractAsInt(input.remove(0)),
-                                    extract(input.remove(0)).equals("right") ? 1 : -1,
-                                    extract(input.remove(0))
-                            )
-                    )
+                    new Instruction[]{
+                            parseInstruction(input), // Instruction for value 0
+                            parseInstruction(input)  // Instruction for value 1
+                    }
             ));
         }
 
+        Map<String, State> states = stateList.stream()
+                .collect(Collectors.toMap(State::label, Function.identity()));
+
         return new Blueprint(initState, steps, states);
     }
+
+    private static Instruction parseInstruction(List<String> input) {
+        return new Instruction(
+                extractAsInt(input.remove(0)),
+                extractAsInt(input.remove(0)),
+                extract(input.remove(0)).equals("right") ? 1 : -1,
+                extract(input.remove(0))
+        );
+    }
+
     private static String extract(String line, int index) {
         line = line.substring(0, line.length() - 1);
         String[] words = line.split(" ");

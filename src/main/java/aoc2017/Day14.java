@@ -3,9 +3,9 @@ package aoc2017;
 import common.DayBase;
 import common.PuzzleInput;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -20,78 +20,65 @@ public class Day14 extends DayBase<String, Integer, Integer> {
         super(input);
     }
 
-    record Square(int x, int y) {
-        public boolean isAdjacent(Square other) {
-            return (this.x == other.x && (this.y == other.y - 1 || this.y == other.y + 1)) ||
-                    ((this.x == other.x - 1 || this.x == other.x + 1) && this.y == other.y);
-        }
-    }
 
     @Override
     public Integer firstStar() {
         String hash = this.getInput(PuzzleInput::asString);
 
-        return Arrays.stream(String.join("", computeDiskState(hash)).split(""))
-                .mapToInt(Integer::parseInt)
+        return computeDiskState(hash).stream()
+                .mapToInt(row -> (int) row.chars().filter(c -> c == '1').count())
                 .sum();
     }
 
     @Override
     public Integer secondStar() {
         String hash = this.getInput(PuzzleInput::asString);
+        List<String> diskState = computeDiskState(hash);
 
-        List<Square> used = getUsedSquares(hash);
-
-        List<Square> currentRegion = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
         int regionCount = 0;
-        while (!used.isEmpty()) {
-            if (currentRegion.isEmpty()) {
-                currentRegion.add(used.remove(0));
-            }
 
-            boolean keepExploring = false;
-            for (int i = 0; i < used.size(); i++) {
-                Square current = used.get(i);
-                if (currentRegion.stream().anyMatch(s -> s.isAdjacent(current))) {
-                    currentRegion.add(used.remove(i));
-                    i--;
-                    keepExploring = true;
+        for (int y = 0; y < 128; y++) {
+            for (int x = 0; x < 128; x++) {
+                String key = x + "," + y;
+                if (diskState.get(y).charAt(x) == '1' && !visited.contains(key)) {
+                    regionCount++;
+                    exploreRegion(x, y, diskState, visited);
                 }
-            }
-
-            if (!keepExploring) {
-                regionCount++;
-                currentRegion = new ArrayList<>();
             }
         }
 
         return regionCount;
     }
 
+    private void exploreRegion(int x, int y, List<String> disk, Set<String> visited) {
+        if (x < 0 || x >= 128 || y < 0 || y >= 128) return;
+
+        String key = x + "," + y;
+        if (visited.contains(key) || disk.get(y).charAt(x) == '0') return;
+
+        visited.add(key);
+
+        exploreRegion(x + 1, y, disk, visited);
+        exploreRegion(x - 1, y, disk, visited);
+        exploreRegion(x, y + 1, disk, visited);
+        exploreRegion(x, y - 1, disk, visited);
+    }
+
     private static List<String> computeDiskState(String hash) {
         return IntStream.range(0, 128)
                 .boxed()
-                .map(i -> Day10.generateKnotHash(hash + "-" + i))
-                .map(l -> Arrays.stream(l.split(""))
-                        .map(hex -> String.format("%4s", Integer.toBinaryString(Integer.parseInt(hex, 16))).replace(' ', '0'))
-                        .collect(Collectors.joining(""))
-                )
+                .map(i -> Day10.generateKnotHash(hash + "-" + i)) // Assuming Day10 provides the hex hash
+                .map(Day14::hexToBinaryRow)
                 .toList();
     }
 
-    private static List<Square> getUsedSquares(String hash) {
-        List<String> diskState = computeDiskState(hash);
-        List<Square> used = new ArrayList<>();
-
-        for (int j = 0; j < diskState.size(); j++) {
-            List<String> squares = List.of(diskState.get(j).split(""));
-            for (int i = 0; i < squares.size(); i++) {
-                if (squares.get(i).equals("1")) {
-                    used.add(new Square(i, j));
-                }
-            }
-        }
-
-        return used;
+    private static String hexToBinaryRow(String hexString) {
+        return hexString.chars()
+                .mapToObj(c -> (char) c)
+                .map(c -> Integer.parseInt(String.valueOf(c), 16))
+                .map(Integer::toBinaryString)
+                .map(bin -> String.format("%4s", bin).replace(' ', '0'))
+                .collect(Collectors.joining());
     }
 }

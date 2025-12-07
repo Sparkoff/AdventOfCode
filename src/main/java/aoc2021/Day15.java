@@ -5,8 +5,7 @@ import common.DayBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.PriorityQueue;
 
 
 public class Day15 extends DayBase<Day15.RiskMap, Integer, Integer> {
@@ -62,7 +61,12 @@ public class Day15 extends DayBase<Day15.RiskMap, Integer, Integer> {
         }
     }
 
-    record RiskStep(int idx, short riskLevel) {}
+    record RiskStep(int idx, int riskLevel) implements Comparable<RiskStep> {
+        @Override
+        public int compareTo(RiskStep other) {
+            return Integer.compare(this.riskLevel, other.riskLevel);
+        }
+    }
 
 
     @Override
@@ -75,33 +79,34 @@ public class Day15 extends DayBase<Day15.RiskMap, Integer, Integer> {
         return findLowRiskPath(RiskMap.asLarge(this.getInput(Day15::parseMap)));
     }
 
-    private static Integer findLowRiskPath(RiskMap riskMap) {
-        List<Short> pathMap = IntStream.range(0, riskMap.getMapSize())
-                .mapToObj(i -> Short.MAX_VALUE)
-                .collect(Collectors.toList());
-        pathMap.set(0, (short) 0);
 
-        List<RiskStep> remains = new ArrayList<>();
-        remains.add(new RiskStep(0, (short) 0));
+    private static Integer findLowRiskPath(RiskMap riskMap) {
+        int[] pathMap = new int[riskMap.getMapSize()];
+        Arrays.fill(pathMap, Integer.MAX_VALUE);
+        pathMap[0] = 0;
+
+        PriorityQueue<RiskStep> remains = new PriorityQueue<>();
+        remains.add(new RiskStep(0, 0));
 
         while (!remains.isEmpty()) {
-            RiskStep next = remains.remove(0);
-            if (pathMap.get(next.idx) < next.riskLevel) continue;
+            RiskStep current = remains.poll();
 
-            List<RiskStep> adjacents = getAdjacentIndexes(next.idx, riskMap)
-                    .stream()
-                    .map(idx -> new RiskStep(idx, (short) (next.riskLevel + riskMap.getRiskAt(idx))))
-                    .filter(rs -> rs.riskLevel < pathMap.get(rs.idx))
-                    .toList();
-
-            for (RiskStep rs : adjacents) {
-                pathMap.set(rs.idx, rs.riskLevel);
+            if (current.idx == pathMap.length - 1) {
+                return current.riskLevel;
             }
 
-            remains.addAll(adjacents);
+            if (current.riskLevel > pathMap[current.idx]) continue;
+
+            for (int adjacentIdx : getAdjacentIndexes(current.idx, riskMap)) {
+                int newRisk = current.riskLevel + riskMap.getRiskAt(adjacentIdx);
+                if (newRisk < pathMap[adjacentIdx]) {
+                    pathMap[adjacentIdx] = newRisk;
+                    remains.add(new RiskStep(adjacentIdx, newRisk));
+                }
+            }
         }
 
-        return (int) pathMap.get(pathMap.size() - 1);
+        return pathMap[pathMap.length - 1];
     }
 
     private static List<Integer> getAdjacentIndexes(int index, RiskMap riskMap) {

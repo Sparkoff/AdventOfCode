@@ -3,8 +3,10 @@ package aoc2017;
 import common.DayBase;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -24,30 +26,36 @@ public class Day22 extends DayBase<Set<Day22.Point>, Integer, Integer> {
         }
     }
 
+
+    enum State { CLEAN, WEAKENED, INFECTED, FLAGGED }
     enum Direction {
         UP(0),  LEFT(1), DOWN(2), RIGHT(3);
 
+        private static final Direction[] a = {UP, LEFT, DOWN, RIGHT};
         private final int id;
 
         Direction(int id) {
             this.id = id;
         }
 
-        private static Direction getDirectionById(int id) {
-            for (Direction d : values()) {
-                if (d.id == id) {
-                    return d;
-                }
-            }
-            return null;
+        public Direction turnLeft() {
+            return a[(this.id + 1) % 4];
+        }
+
+        public Direction turnRight() {
+            return a[(this.id + 3) % 4];
+        }
+
+        public Direction reverse() {
+            return a[(this.id + 2) % 4];
         }
 
         public Direction facing(Direction turn) {
             return switch (turn) {
                 case UP -> this;
-                case LEFT -> getDirectionById((this.id + 1) % 4);
-                case DOWN -> getDirectionById((this.id + 2) % 4);
-                case RIGHT -> getDirectionById((this.id + 3) % 4);
+                case LEFT -> turnLeft();
+                case DOWN -> reverse();
+                case RIGHT -> turnRight();
             };
         }
     }
@@ -67,6 +75,7 @@ public class Day22 extends DayBase<Set<Day22.Point>, Integer, Integer> {
             };
         }
     }
+
 
     @Override
     public Integer firstStar() {
@@ -92,35 +101,42 @@ public class Day22 extends DayBase<Set<Day22.Point>, Integer, Integer> {
 
     @Override
     public Integer secondStar() {
-        Set<Point> infected = new HashSet<>(this.getInput(Day22::parseGrid));
-        Set<Point> weakened = new HashSet<>();
-        Set<Point> flagged = new HashSet<>();
+        Set<Point> initialInfected = this.getInput(Day22::parseGrid);
+        Map<Point, State> grid = new HashMap<>();
+        initialInfected.forEach(p -> grid.put(p, State.INFECTED));
 
         VirusCarrier virusCarrier = new VirusCarrier();
         int infectionBurst = 0;
+
         for (int i = 0; i < 1E7; i++) {
-            Direction turn;
-            if (weakened.contains(virusCarrier.location)) {
-                turn = Direction.UP;
-                weakened.remove(virusCarrier.location);
-                infected.add(virusCarrier.location);
-                infectionBurst++;
-            } else if (infected.contains(virusCarrier.location)) {
-                turn = Direction.RIGHT;
-                infected.remove(virusCarrier.location);
-                flagged.add(virusCarrier.location);
-            } else if (flagged.contains(virusCarrier.location)) {
-                turn = Direction.DOWN;
-                flagged.remove(virusCarrier.location);
-            } else {
-                turn = Direction.LEFT;
-                weakened.add(virusCarrier.location);
+            Point currentLocation = virusCarrier.location();
+            State currentState = grid.getOrDefault(currentLocation, State.CLEAN);
+            Direction turn = Direction.UP;
+
+            switch (currentState) {
+                case CLEAN -> {
+                    turn = Direction.LEFT;
+                    grid.put(currentLocation, State.WEAKENED);
+                }
+                case WEAKENED -> {
+                    grid.put(currentLocation, State.INFECTED);
+                    infectionBurst++;
+                }
+                case INFECTED -> {
+                    turn = Direction.RIGHT;
+                    grid.put(currentLocation, State.FLAGGED);
+                }
+                case FLAGGED -> {
+                    turn = Direction.DOWN;
+                    grid.remove(currentLocation);
+                }
             }
-            virusCarrier = virusCarrier.move(turn);
+            virusCarrier = virusCarrier.move(turn); // Move forward
         }
 
         return infectionBurst;
     }
+
 
     private static Set<Point> parseGrid(List<String> input) {
         int extreme = (input.size() - 1) / 2;

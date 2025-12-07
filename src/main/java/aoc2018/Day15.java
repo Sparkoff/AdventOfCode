@@ -2,12 +2,14 @@ package aoc2018;
 
 import common.DayBase;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -141,56 +143,7 @@ public class Day15 extends DayBase<Day15.Cavern, Integer, Integer> {
         }
     }
 
-    record PathStep(Point p, int weight, Point target) implements Comparable<PathStep> {
-        public PathStep(Point p) {
-            this(p, 0, p);
-        }
-
-        @Override
-        public int compareTo(PathStep other) {
-            return Comparator.comparingInt(PathStep::weight)
-                    .thenComparing(PathStep::target)
-                    .compare(this, other);
-        }
-    }
-    static class PathStepList {
-        private final List<PathStep> list = new ArrayList<>();
-
-        public PathStepList(List<PathStep> points) {
-            list.addAll(points);
-        }
-
-        public boolean add(PathStep p) {
-            Optional<PathStep> existingPoint = list.stream()
-                    .filter(ep -> ep.p().equals(p.p()))
-                    .findFirst();
-
-            if (existingPoint.isPresent()) {
-                if (p.compareTo(existingPoint.get()) < 0) {
-                    list.set(list.indexOf(existingPoint.get()), p);
-                    return true;
-                }
-            } else {
-                list.add(p);
-                return true;
-            }
-            return false;
-        }
-
-        public boolean isEmpty() {
-            return list.isEmpty();
-        }
-
-        public PathStep next() {
-            return list.remove(0);
-        }
-
-        public List<PathStep> weightAt(List<Point> points) {
-            return list.stream()
-                    .filter(wp -> points.contains(wp.p()))
-                    .toList();
-        }
-    }
+    record Path(Point firstStep, Point target, int distance) {}
 
 
     @Override
@@ -318,38 +271,56 @@ public class Day15 extends DayBase<Day15.Cavern, Integer, Integer> {
         return round;
     }
 
-    private static void movePlayer(Player player, List<Point> targets, Cave cave, List<Point> nonFree) {
-        List<PathStep> availableTargets = targets.stream()
-                .filter(t -> cave.inMap(t) && !nonFree.contains(t))
-                .map(PathStep::new)
-                .toList();
+    private static void movePlayer(Player player, List<Point> targets, Cave cave, List<Point> nonFreeSquares) {
+        findBestMove(player, targets, cave, nonFreeSquares).ifPresent(player::setLocation);
+    }
 
-        PathStepList toVisit = new PathStepList(availableTargets);
-        PathStepList visited = new PathStepList(availableTargets);
+    private static Optional<Point> findBestMove(Player player, List<Point> targets, Cave cave, List<Point> nonFreeSquares) {
+        Queue<Point> queue = new ArrayDeque<>();
+        queue.add(player.getLocation());
 
-        while (!toVisit.isEmpty()) {
-            PathStep current = toVisit.next();
-            List<PathStep> nexts = current.p().getAdjacentPoints()
-                    .stream()
-                    .filter(p -> cave.inMap(p) && !nonFree.contains(p))
-                    .map(p -> new PathStep(p, current.weight() + 1, current.target()))
-                    .toList();
+        // This map tracks visited points and the first step taken from the player's location to reach them.
+        Map<Point, Point> firstStepMap = new HashMap<>();
+        firstStepMap.put(player.getLocation(), player.getLocation()); // The path to the start is the start itself.
 
-            for (PathStep next : nexts) {
-                if (visited.add(next)) {
-                    toVisit.add(next);
+        List<Path> solutions = new ArrayList<>();
+
+        while (!queue.isEmpty()) {
+            // Perform a level-by-level BFS.
+            int levelSize = queue.size();
+            for (int i = 0; i < levelSize; i++) {
+                Point current = queue.poll();
+
+                if (current != null) {
+                    for (Point neighbor : current.getAdjacentPoints()) {
+                        if (!cave.inMap(neighbor) || nonFreeSquares.contains(neighbor) || firstStepMap.containsKey(neighbor)) {
+                            continue;
+                        }
+
+                        // Determine the first step taken from the player's location.
+                        Point step = current.equals(player.getLocation()) ? neighbor : firstStepMap.get(current);
+                        firstStepMap.put(neighbor, step);
+
+                        if (targets.contains(neighbor)) {
+                            // We found a path to a target. The distance is implicit by the BFS level.
+                            solutions.add(new Path(step, neighbor, 0)); // Distance value is not needed for comparison here.
+                        } else {
+                            queue.add(neighbor);
+                        }
+                    }
                 }
+            }
+
+            // If we have found any solutions at this level (shortest distance), we can stop searching.
+            if (!solutions.isEmpty()) {
+                break;
             }
         }
 
-        List<PathStep> adj = visited.weightAt(player.getRange()).stream()
-                .sorted(PathStep::compareTo)
-                .toList();
-
-        adj.stream()
-                .map(PathStep::p)
-                .findFirst()
-                .ifPresent(player::setLocation);
+        return solutions.stream()
+                .min(Comparator.comparing(Path::target)
+                        .thenComparing(Path::firstStep))
+                .map(Path::firstStep);
     }
 
     private static Cavern parseCavern(List<String> input) {
