@@ -2,7 +2,6 @@ package common;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -17,15 +16,11 @@ public class PuzzleInput<T> {
 
 
     public PuzzleInput(String packageName, String className) {
-        try {
-            String file = String.format("%s/%s.txt", packageName, className.toLowerCase());
-            this.originalInput = IOUtils.readLines(
-                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(file)),
-                    StandardCharsets.UTF_8
-            );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String file = String.format("%s/%s.txt", packageName, className.toLowerCase());
+        this.originalInput = IOUtils.readLines(
+                Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(file)),
+                StandardCharsets.UTF_8
+        );
     }
 
     public PuzzleInput(List<String> testInput) {

@@ -4,14 +4,13 @@ import common.DayBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparingInt;
 
 
 public class Day22 extends DayBase<Map<Integer, Day22.Node>, Integer, Integer> {
@@ -25,33 +24,11 @@ public class Day22 extends DayBase<Map<Integer, Day22.Node>, Integer, Integer> {
     }
 
     record Pt(int x, int y, int z) {
-        public Pt goDown() {
-            return new Pt(x, y, z - 1);
+        public Pt goDown(int fallDistance) {
+            return new Pt(x, y, z - fallDistance);
         }
     }
-    record Brick(Pt begin, Pt end) {
-        public List<Pt> getCubes() {
-            List<Pt> cubes = new ArrayList<>();
-            for (int x = begin.x(); x <= end.x(); x++) {
-                for (int y = begin.y(); y <= end.y(); y++) {
-                    for (int z = begin.z(); z <= end.z(); z++) {
-                        cubes.add(new Pt(x, y, z));
-                    }
-                }
-            }
-            return cubes;
-        }
-
-        public Brick goDown() {
-            return new Brick(begin.goDown(), end.goDown());
-        }
-
-        public boolean layOn(Brick other) {
-            return this.begin.z() == other.end.z() + 1 &&
-                    (this.begin.x() <= other.end.x() && this.end.x() >= other.begin.x()) &&
-                    (this.begin.y() <= other.end.y() && this.end.y() >= other.begin.y());
-        }
-    }
+    record Brick(Pt begin, Pt end) {}
     record Node(int id, List<Integer> up, List<Integer> down) {}
 
 
@@ -59,26 +36,15 @@ public class Day22 extends DayBase<Map<Integer, Day22.Node>, Integer, Integer> {
     public Integer firstStar() {
         Map<Integer, Node> brickLayer = this.getInput(Day22::parseSnapshot);
 
-        List<Integer> singleSupport = brickLayer.values().stream()
-                .map(Node::down)
-                .filter(down -> down.size() == 1)
-                .flatMap(List::stream)
-                .distinct()
-                .toList();
-        List<Integer> duplicatedSupport = brickLayer.values().stream()
-                .map(Node::down)
-                .filter(down -> down.size() > 1)
-                .flatMap(List::stream)
-                .distinct()
-                .filter(b -> !singleSupport.contains(b))
-                .toList();
-
-        List<Integer> notSupporting = brickLayer.values().stream()
-                .filter(n -> n.up().isEmpty())
-                .map(Node::id)
-                .toList();
-
-        return duplicatedSupport.size() + notSupporting.size();
+        // A brick can be disintegrated if it's not the sole support for any other brick.
+        return (int) brickLayer.values().stream()
+                .filter(node -> {
+                    // Find all bricks supported by this node.
+                    return node.up().stream()
+                            // Check if any of those supported bricks have ONLY this node as support.
+                            .noneMatch(supportedId -> brickLayer.get(supportedId).down().size() == 1);
+                })
+                .count();
     }
 
     @Override
@@ -113,7 +79,7 @@ public class Day22 extends DayBase<Map<Integer, Day22.Node>, Integer, Integer> {
 
 
     private static Map<Integer, Node> parseSnapshot(List<String> input) {
-        List<Brick> snapshot = input.stream()
+        List<Brick> bricks = new ArrayList<>(input.stream()
                 .map(l -> l.split("~"))
                 .map(l -> Arrays.stream(l)
                         .map(p -> Arrays.stream(p.split(","))
@@ -123,62 +89,59 @@ public class Day22 extends DayBase<Map<Integer, Day22.Node>, Integer, Integer> {
                         .map(p -> new Pt(p.get(0), p.get(1), p.get(2)))
                         .toList()
                 )
-                .map(l -> new Brick(l.get(0), l.get(1)))
-                .sorted(Comparator.comparingInt(b -> b.begin().z()))
-                .collect(Collectors.toList());
+                .map(l -> new Brick(l.get(0), l.get(1))).toList());
 
-        moveToStack(snapshot);
+        bricks.sort(comparingInt(b -> b.begin().z()));
 
-        Map<Integer, List<Integer>> ups = new HashMap<>();
-        Map<Integer, List<Integer>> downs = new HashMap<>();
-        for (int i = 0; i < snapshot.size(); i++) {
-            ups.put(i, new ArrayList<>());
-            downs.put(i, new ArrayList<>());
+        // Height map for the XY plane
+        Map<Pt, Integer> heightMap = new HashMap<>();
+        Map<Pt, Integer> idMap = new HashMap<>();
 
-            Brick current = snapshot.get(i);
-            for (int j = 0; j < i; j++) {
-                if (current.layOn(snapshot.get(j))) {
-                    ups.get(j).add(i);
-                    downs.get(i).add(j);
-                }
-            }
-        }
+        Map<Integer, Node> nodes = new HashMap<>();
 
-        return ups.keySet().stream()
-                .map(i -> new Node(i, ups.get(i), downs.get(i)))
-                .collect(Collectors.toMap(Node::id, n -> n));
-    }
+        for (int i = 0; i < bricks.size(); i++) {
+            Brick brick = bricks.get(i);
+            int maxHeight = 0;
+            Set<Integer> supportingIds = new HashSet<>();
 
-    private static void moveToStack(List<Brick> bricks) {
-        boolean stacked = false;
-        while (!stacked) {
-            stacked = true;
-
-            for (int i = 0; i < bricks.size(); i++) {
-                Brick current = bricks.get(i);
-
-                if (current.begin().z() != 1) {
-                    Brick finalCurrent = current;
-                    List<Pt> blocks = bricks.stream()
-                            .filter(b -> !b.equals(finalCurrent))
-                            .map(Brick::getCubes)
-                            .flatMap(List::stream)
-                            .toList();
-
-                    boolean moved = false;
-                    Brick next = current.goDown();
-                    while (next.begin().z() > 0 && Collections.disjoint(blocks, next.getCubes())) {
-                        moved = true;
-                        current = next;
-                        next = current.goDown();
-                    }
-
-                    if (moved) {
-                        stacked = false;
-                        bricks.set(i, current);
+            // Find the ground level for the current brick
+            for (int x = brick.begin.x(); x <= brick.end.x(); x++) {
+                for (int y = brick.begin.y(); y <= brick.end.y(); y++) {
+                    Pt groundPt = new Pt(x, y, 0);
+                    int currentHeight = heightMap.getOrDefault(groundPt, 0);
+                    if (currentHeight > maxHeight) {
+                        maxHeight = currentHeight;
+                        supportingIds.clear();
+                        supportingIds.add(idMap.get(groundPt));
+                    } else if (currentHeight == maxHeight && maxHeight > 0) {
+                        supportingIds.add(idMap.get(groundPt));
                     }
                 }
             }
+
+            // Move brick down to its final resting Z position
+            int fallDistance = brick.begin.z() - (maxHeight + 1);
+            Brick settledBrick = brick;
+            if (fallDistance > 0) {
+                settledBrick = new Brick(brick.begin.goDown(fallDistance), brick.end.goDown(fallDistance));
+            }
+
+            // Update the height map with the new brick's info
+            for (int x = settledBrick.begin.x(); x <= settledBrick.end.x(); x++) {
+                for (int y = settledBrick.begin.y(); y <= settledBrick.end.y(); y++) {
+                    Pt groundPt = new Pt(x, y, 0);
+                    heightMap.put(groundPt, settledBrick.end.z());
+                    idMap.put(groundPt, i);
+                }
+            }
+
+            // Create the node and link dependencies
+            nodes.put(i, new Node(i, new ArrayList<>(), new ArrayList<>(supportingIds)));
+            for (int supporterId : supportingIds) {
+                nodes.get(supporterId).up().add(i);
+            }
         }
+
+        return nodes;
     }
 }

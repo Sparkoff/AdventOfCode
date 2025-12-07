@@ -5,8 +5,9 @@ import common.DayBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 
 public class Day6 extends DayBase<List<Integer>, Integer, Integer> {
@@ -35,33 +36,33 @@ public class Day6 extends DayBase<List<Integer>, Integer, Integer> {
         return debug(memoryBanks).loopSize();
     }
 
+
     static DebugData debug(List<Integer> memoryBanks) {
         memoryBanks = new ArrayList<>(memoryBanks);
 
-        List<String> seen = new ArrayList<>();
-        seen.add(memToString(memoryBanks));
-        do {
+        Map<String, Integer> seen = new HashMap<>();
+        int cycles = 0;
+
+        while (!seen.containsKey(memToString(memoryBanks))) {
+            seen.put(memToString(memoryBanks), cycles);
+
             int topValue = Collections.max(memoryBanks);
             int topIdx = memoryBanks.indexOf(topValue);
 
             memoryBanks.set(topIdx, 0);
             for (int i = 0; i < topValue; i++) {
                 int idx = (topIdx + i + 1) % memoryBanks.size();
-                int currentValue = memoryBanks.get(idx);
-                memoryBanks.set(idx, currentValue + 1);
+                memoryBanks.set(idx, memoryBanks.get(idx) + 1);
             }
+            cycles++;
+        }
 
-            seen.add(memToString(memoryBanks));
-        } while (seen.size() == seen.stream().distinct().count());
-
-        int loopSize = seen.size() - seen.indexOf(seen.get(seen.size() - 1)) - 1;
-        return new DebugData(loopSize, seen.size() - 1);
+        int loopSize = cycles - seen.get(memToString(memoryBanks));
+        return new DebugData(loopSize, cycles);
     }
 
     static String memToString(List<Integer> memoryBanks) {
-        return memoryBanks.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(":"));
+        return memoryBanks.toString();
     }
 
     private static List<Integer> parseMemoryBanks(List<String> input) {

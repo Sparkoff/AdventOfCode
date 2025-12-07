@@ -1,6 +1,5 @@
 package aoc2023;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -71,7 +70,6 @@ class Day23Test {
     }
 
     @Test
-    @Disabled("Test disabled due to long duration: 11sec")
     void test_real_inputs() {
         Day23 day = new Day23();
 

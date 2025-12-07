@@ -2,8 +2,9 @@ package aoc2021;
 
 import common.DayBase;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class Day25 extends DayBase<Day25.SeaFloor, Integer, Integer> {
@@ -17,8 +18,8 @@ public class Day25 extends DayBase<Day25.SeaFloor, Integer, Integer> {
     }
 
     public record Coord(int x, int y) {}
-    public record SeaFloor(int height, int width, List<Coord> east, List<Coord> south, boolean hasMoved) {
-        public SeaFloor(int height, int width, List<Coord> east, List<Coord> south) {
+    public record SeaFloor(int height, int width, Set<Coord> east, Set<Coord> south, boolean hasMoved) {
+        public SeaFloor(int height, int width, Set<Coord> east, Set<Coord> south) {
             this(height, width, east, south, true);
         }
 
@@ -49,36 +50,44 @@ public class Day25 extends DayBase<Day25.SeaFloor, Integer, Integer> {
     }
 
     public static SeaFloor computeNextStep(SeaFloor seaFloor) {
-        int movedCount = 0;
+        // Phase 1: East-moving cucumbers
+        Set<Coord> allCucumbers = new HashSet<>(seaFloor.east());
+        allCucumbers.addAll(seaFloor.south());
 
-        List<Coord> newEast = new ArrayList<>();
+        Set<Coord> newEast = new HashSet<>();
+        int movedCountEast = 0;
         for (Coord seaCucumber : seaFloor.east()) {
             Coord next = seaFloor.goEast(seaCucumber);
-            if (seaFloor.east().contains(next) || seaFloor.south().contains(next)) {
+            if (allCucumbers.contains(next)) {
                 newEast.add(seaCucumber);
             } else {
                 newEast.add(next);
-                movedCount++;
+                movedCountEast++;
             }
         }
 
-        List<Coord> newSouth = new ArrayList<>();
+        // Phase 2: South-moving cucumbers
+        allCucumbers = new HashSet<>(newEast);
+        allCucumbers.addAll(seaFloor.south());
+
+        Set<Coord> newSouth = new HashSet<>();
+        int movedCountSouth = 0;
         for (Coord seaCucumber : seaFloor.south()) {
             Coord next = seaFloor.goSouth(seaCucumber);
-            if (newEast.contains(next) || seaFloor.south().contains(next)) {
+            if (allCucumbers.contains(next)) {
                 newSouth.add(seaCucumber);
             } else {
                 newSouth.add(next);
-                movedCount++;
+                movedCountSouth++;
             }
         }
 
-        return new SeaFloor(seaFloor.height(), seaFloor.width(), newEast, newSouth, movedCount != 0);
+        return new SeaFloor(seaFloor.height(), seaFloor.width(), newEast, newSouth, (movedCountEast + movedCountSouth) > 0);
     }
 
     private static SeaFloor parseSeaFloor(List<String> input) {
-        List<Coord> east = new ArrayList<>();
-        List<Coord> south = new ArrayList<>();
+        Set<Coord> east = new HashSet<>();
+        Set<Coord> south = new HashSet<>();
 
         for (int y = 0; y < input.size(); y++) {
             for (int x = 0; x < input.get(y).length(); x++) {

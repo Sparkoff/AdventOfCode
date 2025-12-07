@@ -2,13 +2,12 @@ package aoc2021;
 
 import common.DayBase;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class Day12 extends DayBase<Map<Day12.Cave, List<Day12.Cave>>, Integer, Integer> {
@@ -35,78 +34,56 @@ public class Day12 extends DayBase<Map<Day12.Cave, List<Day12.Cave>>, Integer, I
         }
     }
 
-    enum PathMode {
-        SINGLE, TWICE
-    }
 
     @Override
     public Integer firstStar() {
         Map<Cave, List<Cave>> caveSystem = this.getInput(Day12::parseCaveSystem);
-
-        return exploreCave(caveSystem, PathMode.SINGLE).size();
+        return countPaths(new Cave("start"), new HashSet<>(), caveSystem, false);
     }
 
     @Override
     public Integer secondStar() {
         Map<Cave, List<Cave>> caveSystem = this.getInput(Day12::parseCaveSystem);
-
-        return exploreCave(caveSystem, PathMode.TWICE).size();
+        return countPaths(new Cave("start"), new HashSet<>(), caveSystem, true);
     }
 
-    private List<List<Cave>> exploreCave(Map<Cave, List<Cave>> caveSystem, PathMode mode) {
-        List<List<Cave>> paths = new ArrayList<>();
+    private int countPaths(Cave current, Set<Cave> visited, Map<Cave, List<Cave>> caveSystem, boolean canVisitSmallCaveTwice) {
+        if (current.isEnd()) {
+            return 1;
+        }
 
-        List<List<Cave>> inProgress = new ArrayList<>();
-        inProgress.add(List.of(new Cave("start")));
+        if (!current.isBig) {
+            if (visited.contains(current)) {
+                if (!canVisitSmallCaveTwice) return 0;
+                canVisitSmallCaveTwice = false; // Use up the one-time allowance
+            }
+            visited.add(current);
+        }
 
-        while (!inProgress.isEmpty()) {
-            List<Cave> next = inProgress.remove(0);
+        int totalPaths = 0;
+        for (Cave neighbor : caveSystem.get(current)) {
+            if (neighbor.isStart()) continue;
 
-            List<List<Cave>> nextPossibilities = nextStep(next, caveSystem, mode);
-
-            if (nextPossibilities != null) {
-                inProgress.addAll(nextPossibilities.stream()
-                        .filter(p -> !p.get(p.size() - 1).isEnd())
-                        .toList());
-                paths.addAll(nextPossibilities.stream()
-                        .filter(p -> p.get(p.size() - 1).isEnd())
-                        .toList());
+            // A recursive call is valid if the neighbor is a big cave, or if it hasn't been visited,
+            // or if we are still allowed to visit one small cave twice.
+            if (neighbor.isBig || !visited.contains(neighbor) || canVisitSmallCaveTwice) {
+                totalPaths += countPaths(neighbor, new HashSet<>(visited), caveSystem, canVisitSmallCaveTwice);
             }
         }
 
-        return paths;
-    }
-
-    private List<List<Cave>> nextStep(List<Cave> path, Map<Cave, List<Cave>> caveSystem, PathMode mode) {
-        Cave lastCave = path.get(path.size() - 1);
-
-        boolean noDuplicates = path.stream()
-                .filter(p -> !p.isBig)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet()
-                .stream()
-                .noneMatch(p -> p.getValue() > 1);
-
-        List<Cave> nextCaves = caveSystem.get(lastCave).stream()
-                .filter(c -> !c.isStart() && (c.isEnd() || c.isBig || (mode == PathMode.SINGLE ?
-                        !path.contains(c) :
-                        !path.contains(c) || noDuplicates)))
-                .toList();
-
-        if (nextCaves.isEmpty()) return null;
-
-        return nextCaves.stream()
-                .map(c -> Stream.concat(path.stream(), Stream.of(c)).toList())
-                .toList();
+        return totalPaths;
     }
 
     private static Map<Cave, List<Cave>> parseCaveSystem(List<String> input) {
-        return input.stream()
+        List<Map.Entry<Cave, Cave>> connections = input.stream()
                 .map(l -> Arrays.stream(l.split("-"))
                         .map(Cave::new)
                         .toList())
                 .map(l -> Map.of(l.get(0), l.get(1), l.get(1), l.get(0)))
                 .flatMap(m -> m.entrySet().stream())
+                .toList();
+
+        return connections.stream()
                 .collect(Collectors.groupingBy(
                         Map.Entry::getKey,
                         Collectors.mapping(Map.Entry::getValue, Collectors.toList())

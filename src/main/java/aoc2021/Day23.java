@@ -7,10 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.PriorityQueue;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -50,7 +49,9 @@ public class Day23 extends DayBase<Day23.State, Integer, Integer> {
         }
     }
 
-    record Move(State state, int energy) {}
+    record Move(State state, int energy) implements Comparable<Move> {
+        @Override public int compareTo(Move other) { return Integer.compare(this.energy, other.energy); }
+    }
 
 
     @Override
@@ -84,27 +85,31 @@ public class Day23 extends DayBase<Day23.State, Integer, Integer> {
     }
 
     static int solve(State state) {
-        Map<State,Integer> energyByState = new HashMap<>(Map.of(state, 0));
-        Set<Move> visited = new HashSet<>();
-        for (int updated = 0; energyByState.size() > updated;) {
-            updated = energyByState.size();
+        PriorityQueue<Move> queue = new PriorityQueue<>();
+        Map<State, Integer> minEnergy = new HashMap<>();
 
-            List<Move> possibleMoves = energyByState.entrySet().stream()
-                    .filter(e -> !visited.contains(new Move(e.getKey(), e.getValue())))
-                    .flatMap(e -> Logic.allPossibleMoves(e.getKey(), e.getValue()).stream())
-                    .toList();
+        queue.add(new Move(state, 0));
+        minEnergy.put(state, 0);
 
-            visited.addAll(energyByState.entrySet().stream()
-                    .map(e -> new Move(e.getKey(), e.getValue()))
-                    .toList());
+        while (!queue.isEmpty()) {
+            Move current = queue.poll();
 
-            possibleMoves.forEach(m -> energyByState.merge(m.state(), m.energy(), Math::min));
+            if (Logic.finished(current.state())) {
+                return current.energy();
+            }
+
+            if (current.energy() > minEnergy.getOrDefault(current.state(), Integer.MAX_VALUE)) {
+                continue;
+            }
+
+            for (Move nextMove : Logic.allPossibleMoves(current.state(), current.energy())) {
+                if (nextMove.energy() < minEnergy.getOrDefault(nextMove.state(), Integer.MAX_VALUE)) {
+                    minEnergy.put(nextMove.state(), nextMove.energy());
+                    queue.add(nextMove);
+                }
+            }
         }
-        return energyByState.entrySet().stream()
-                .filter(e -> Logic.finished(e.getKey()))
-                .mapToInt(Map.Entry::getValue)
-                .min()
-                .orElse(Integer.MAX_VALUE);
+        return -1; // No solution found
     }
 
     static class Amphipod {

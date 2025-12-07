@@ -38,7 +38,7 @@ public class Day24 extends DayBase<List<Day24.Component>, Integer, Integer> {
     public Integer firstStar() {
         List<Component> components = this.getInput(Day24::parseComponents);
 
-        return makeBridges(components, 0).stream()
+        return makeBridges(components).stream()
                 .mapToInt(b -> b.stream()
                         .mapToInt(Component::strength)
                         .sum())
@@ -50,7 +50,7 @@ public class Day24 extends DayBase<List<Day24.Component>, Integer, Integer> {
     public Integer secondStar() {
         List<Component> components = this.getInput(Day24::parseComponents);
 
-        return makeBridges(components, 0).stream()
+        return makeBridges(components).stream()
                 .collect(Collectors.groupingBy(List::size))
 
                 .entrySet().stream()
@@ -65,27 +65,30 @@ public class Day24 extends DayBase<List<Day24.Component>, Integer, Integer> {
                 .orElseThrow();
     }
 
-    private static List<List<Component>> makeBridges(List<Component> availableComponents,  int nextType) {
-        List<Component> nextComponents = availableComponents.stream()
-                .filter(c -> c.hasType(nextType))
-                .toList();
+    private static List<List<Component>> makeBridges(List<Component> components) {
+        return findBridgesRecursive(components, new boolean[components.size()], 0);
+    }
 
+    private static List<List<Component>> findBridgesRecursive(List<Component> allComponents, boolean[] used, int nextPort) {
         List<List<Component>> bridges = new ArrayList<>();
-        for (Component component : nextComponents) {
-            bridges.add(List.of(component));
-            List<List<Component>> nextBridges = makeBridges(
-                    availableComponents.stream()
-                            .filter(c -> c != component)
-                            .toList(),
-                    component.next(nextType)
-            );
-            if (!nextBridges.isEmpty()) {
-                bridges.addAll(nextBridges.stream()
-                        .map(b -> Stream.concat(Stream.of(component), b.stream()).toList())
-                        .toList());
+
+        for (int i = 0; i < allComponents.size(); i++) {
+            if (!used[i]) {
+                Component component = allComponents.get(i);
+                if (component.hasType(nextPort)) {
+                    used[i] = true; // Mark as used for this path
+                    bridges.add(List.of(component)); // This component alone forms a valid (short) bridge
+
+                    List<List<Component>> subBridges = findBridgesRecursive(allComponents, used, component.next(nextPort));
+
+                    for (List<Component> subBridge : subBridges) {
+                        bridges.add(Stream.concat(Stream.of(component), subBridge.stream()).toList());
+                    }
+
+                    used[i] = false; // Backtrack: un-mark for other paths
+                }
             }
         }
-
         return bridges;
     }
 

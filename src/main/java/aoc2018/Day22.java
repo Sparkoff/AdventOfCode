@@ -2,12 +2,11 @@ package aoc2018;
 
 import common.DayBase;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.PriorityQueue;
 
 
 public class Day22 extends DayBase<Day22.Cave, Integer, Integer> {
@@ -19,6 +18,7 @@ public class Day22 extends DayBase<Day22.Cave, Integer, Integer> {
     public Day22(List<String> input) {
         super(input);
     }
+
 
     enum RegionType {
         ROCKY(0),
@@ -74,7 +74,12 @@ public class Day22 extends DayBase<Day22.Cave, Integer, Integer> {
         }
     }
 
-    record Step(Point point, Tool tool, int time) {}
+    record Step(Point point, Tool tool, int time) implements Comparable<Step> {
+        @Override
+        public int compareTo(Step other) {
+            return Integer.compare(this.time, other.time);
+        }
+    }
 
     record Cave(Map<Point,RegionType> map, Point target) {}
 
@@ -95,45 +100,39 @@ public class Day22 extends DayBase<Day22.Cave, Integer, Integer> {
         Cave cave = this.getInput(Day22::buildCave);
 
         Map<Point,Map<Tool,Integer>> explored = new HashMap<>();
-        List<Step> next = new ArrayList<>();
+        PriorityQueue<Step> next = new PriorityQueue<>();
+
         next.add(new Step(Point.origin, Tool.TORCH, 0));
 
         while (!next.isEmpty()) {
-            Step current = next.remove(0);
+            Step current = next.poll();
 
-            if (!explored.containsKey(current.point())) {
-                explored.put(
-                        current.point(),
-                        Arrays.stream(Tool.values())
-                                .collect(Collectors.toMap(t -> t, t -> Integer.MAX_VALUE))
-                );
+            if (current.point().equals(cave.target()) && current.tool() == Tool.TORCH) {
+                return current.time();
             }
 
-            if (current.time() < explored.get(current.point()).get(current.tool())) {
-                // shorter path found for same tool, update time in exploration
-                explored.get(current.point()).put(current.tool(), current.time());
-
-                current.point().adjacentInclusive()
-                        .stream()
-                        .filter(p -> cave.map().containsKey(p))
-                        .forEach(point -> {
-                            if (point.equals(current.point())) {
-                                // explore current location by switching tool
-                                Arrays.stream(Tool.values())
-                                        .filter(tool -> tool != current.tool() && cave.map().get(point).checkTool(tool))
-                                        .forEach(tool -> next.add(new Step(point, tool, current.time() + 7)));
-                            } else {
-                                // explore adjacent locations with current tool
-                                if (cave.map().get(point).checkTool(current.tool())) {
-                                    next.add(new Step(point, current.tool(), current.time() + 1));
-                                }
-                            }
-                        });
+            if (current.time() >= explored.getOrDefault(current.point(), Map.of()).getOrDefault(current.tool(), Integer.MAX_VALUE)) {
+                continue; // Already found a shorter or equal path to this state
             }
+            explored.computeIfAbsent(current.point(), k -> new HashMap<>()).put(current.tool(), current.time());
+
+            // Option 1: Move to adjacent regions with the current tool
+            current.point().adjacentInclusive().stream()
+                    .filter(p -> !p.equals(current.point())) // Exclude current point for moves
+                    .filter(p -> cave.map().containsKey(p))
+                    .filter(p -> cave.map().get(p).checkTool(current.tool()))
+                    .forEach(p -> next.add(new Step(p, current.tool(), current.time() + 1)));
+
+            // Option 2: Switch tools at the current location
+            Arrays.stream(Tool.values())
+                    .filter(tool -> tool != current.tool()) // Can't switch to the same tool
+                    .filter(tool -> cave.map().get(current.point()).checkTool(tool))
+                    .forEach(tool -> next.add(new Step(current.point(), tool, current.time() + 7)));
         }
 
-        return explored.get(cave.target()).get(Tool.TORCH);
+        return -1; // Should not be reached if a path exists
     }
+
 
     private static Cave buildCave(List<String> input) {
         int depth = Integer.parseInt(input.get(0).split(" ")[1]);

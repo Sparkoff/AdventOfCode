@@ -3,11 +3,8 @@ package aoc2018;
 import common.DayBase;
 import common.PuzzleInput;
 
-import java.util.AbstractMap;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 
@@ -21,32 +18,45 @@ public class Day11 extends DayBase<Integer, String, String> {
         super(input);
     }
 
-    record FuelCellGrid(List<List<Integer>> fuelCells) {
-        public static int size() {
-            return 300;
-        }
-        public static int lastIndexOnSize(int squareSize) {
-            return 300 - squareSize + 1;
+    record SummedAreaTable(int[][] table) {
+        public static SummedAreaTable fromSerialNumber(int serialNumber) {
+            int gridSize = 301; // Use 301 for 1-based indexing (indices 1-300)
+            int[][] sat = new int[gridSize][gridSize];
+            for (int y = 1; y < gridSize; y++) {
+                for (int x = 1; x < gridSize; x++) {
+                    int power = fuelCellAt(x, y, serialNumber);
+                    sat[y][x] = power + sat[y - 1][x] + sat[y][x - 1] - sat[y - 1][x - 1];
+                }
+            }
+            return new SummedAreaTable(sat);
         }
 
-        public int powerAt(int x, int y) {
-            return fuelCells.get(y - 1).get(x - 1);
-        }
-
-        public int powerAt(int x, int y, int squareSize) {
-            return IntStream.range(y - 1, y + squareSize - 1)
-                    .map(yi -> fuelCells.get(yi)
-                            .subList(x - 1, x + squareSize - 1)
-                            .stream()
-                            .mapToInt(i -> i)
-                            .sum()
-                    )
-                    .sum();
+        /**
+         * Calculates the total power of a square of a given size with its top-left corner at (x, y).
+         */
+        public int getSquarePower(int x, int y, int squareSize) {
+            int x1 = x - 1;
+            int y1 = y - 1;
+            int x2 = x + squareSize - 1;
+            int y2 = y + squareSize - 1;
+            return table[y2][x2] - table[y1][x2] - table[y2][x1] + table[y1][x1];
         }
     }
+
     record Identifier(int x, int y, int s) {
+        @Override
         public String toString() {
+            if (s == 0) { // For firstStar
+                return String.format("%d,%d", x, y);
+            }
             return String.format("%d,%d,%d", x, y, s);
+        }
+    }
+
+    record PowerResult(Identifier id, int power) implements Comparable<PowerResult> {
+        @Override
+        public int compareTo(PowerResult other) {
+            return Integer.compare(this.power, other.power);
         }
     }
 
@@ -55,74 +65,46 @@ public class Day11 extends DayBase<Integer, String, String> {
     public String firstStar() {
         Integer serialNumber = this.getInput(PuzzleInput::asInt);
 
-        FuelCellGrid fuelCellGrid = buildFuelCellGrid(serialNumber);
+        SummedAreaTable sat = SummedAreaTable.fromSerialNumber(serialNumber);
+        int squareSize = 3;
 
-        return IntStream.rangeClosed(1, FuelCellGrid.lastIndexOnSize(3))
-                .mapToObj(y -> IntStream.rangeClosed(1, FuelCellGrid.lastIndexOnSize(3))
-                        .mapToObj(x -> new AbstractMap.SimpleEntry<>(
-                                String.format("%d,%d", x, y),
-                                fuelCellGrid.powerAt(x, y, 3)
-                        ))
-                        .max(Comparator.comparingInt(Map.Entry::getValue))
-                        .orElseThrow())
-                .max(Comparator.comparingInt(Map.Entry::getValue))
+        return IntStream.rangeClosed(1, 300 - squareSize + 1)
+                .boxed()
+                .flatMap(y -> IntStream.rangeClosed(1, 300 - squareSize + 1)
+                        .mapToObj(x -> new PowerResult(new Identifier(x, y, 0), sat.getSquarePower(x, y, squareSize))))
+                .max(Comparator.naturalOrder())
                 .orElseThrow()
-                .getKey();
+                .id()
+                .toString();
     }
 
     @Override
     public String secondStar() {
         Integer serialNumber = this.getInput(PuzzleInput::asInt);
 
-        FuelCellGrid fuelCellGrid = buildFuelCellGrid(serialNumber);
+        SummedAreaTable sat = SummedAreaTable.fromSerialNumber(serialNumber);
 
-        Map<Identifier,Integer> powers = new HashMap<>();
-
-        for (int squareSize = 1; squareSize <= FuelCellGrid.size(); squareSize++) {
-            for (int x = 1; x <= FuelCellGrid.lastIndexOnSize(squareSize); x++) {
-                for (int y = 1; y <= FuelCellGrid.lastIndexOnSize(squareSize); y++) {
-                    int power;
-                    Identifier current = new Identifier(x, y, squareSize);
-
-                    if (squareSize == 1) {
-                        power = fuelCellGrid.powerAt(x, y);
-                    } else {
-                        // ####   ###.   ....   ....   ...#   ....
-                        // ####   ###.   .###   ....   ....   .##.
-                        // #### = ###. + .### + .... + .... - .##.
-                        // ####   ....   .###   #...   ....   ....
-                        power = powers.get(new Identifier(x, y, squareSize - 1)) +
-                                powers.get(new Identifier(x + 1, y + 1, squareSize - 1)) +
-                                powers.get(new Identifier(x + squareSize - 1, y, 1)) +
-                                powers.get(new Identifier(x, y + squareSize - 1, 1));
-                        if (squareSize > 2) {
-                            power -= powers.get(new Identifier(x + 1, y + 1, squareSize - 2));
-                        }
-                    }
-
-                    powers.put(current, power);
-                }
-            }
-        }
-
-        return powers.entrySet().stream()
-                .max(Comparator.comparingInt(Map.Entry::getValue))
+        return IntStream.rangeClosed(1, 300)
+                .parallel() // Parallelize the search across square sizes
+                .mapToObj(squareSize -> {
+                    return IntStream.rangeClosed(1, 300 - squareSize + 1)
+                            .boxed()
+                            .flatMap(y -> IntStream.rangeClosed(1, 300 - squareSize + 1)
+                                    .mapToObj(x -> new PowerResult(new Identifier(x, y, squareSize), sat.getSquarePower(x, y, squareSize))))
+                            .max(Comparator.naturalOrder())
+                            .orElseThrow();
+                })
+                .max(Comparator.naturalOrder())
                 .orElseThrow()
-                .getKey()
+                .id()
                 .toString();
     }
+
 
     public static int fuelCellAt(int x, int y, int serialNumber) {
         int rackId = x + 10;
         int powerLevel = ((rackId * y) + serialNumber) * rackId;
         int hundred = (powerLevel / 100) - ((powerLevel / 1000) * 10);
         return hundred - 5;
-    }
-    private static FuelCellGrid buildFuelCellGrid(int serialNumber) {
-        return new FuelCellGrid(IntStream.rangeClosed(1, FuelCellGrid.size())
-                .mapToObj(y -> IntStream.rangeClosed(1, FuelCellGrid.size())
-                        .mapToObj(x -> fuelCellAt(x, y, serialNumber))
-                        .toList())
-                .toList());
     }
 }
