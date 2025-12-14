@@ -18,10 +18,8 @@ public class Day7 extends DayBase<Day7.TachyonManifoldDiagram, Integer, Long> {
     public Day7(List<String> input) {
         super(input);
     }
-    
-    
-    record TachyonManifoldDiagram(int manifold, List<Integer> splitters, int width, int height) {}
 
+    record TachyonManifoldDiagram(int manifold, List<Integer> splitters, int width, int height) {}
 
 
     @Override
